@@ -1,0 +1,42 @@
+get:
+  tags:
+    - Config - Connectors
+  summary: Get the previous version for a Connector 
+  produces:
+    - application/json
+  parameters:
+    - name: id
+      in: path
+      description: ID of the Connector
+      required: true
+      type: string
+  responses:
+    200:
+      description: Successful Operation
+      schema:
+        $ref: 'main.yml#connector'
+    404:
+      description: Not Found
+      schema:
+        $ref: '../error.yml#not-found'
+        
+delete:
+  tags:
+    - Config - Connectors
+  summary: Delete the previous Connector version
+  produces:
+    - application/json
+  parameters:
+    - name: id
+      in: path
+      description: ID of the Connector
+      required: true
+      type: string
+  responses:
+    200:
+      description: Successful Operation
+    404:
+      description: Not Found
+      schema:
+        $ref: '../error.yml#not-found'
+        

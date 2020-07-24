@@ -1,0 +1,39 @@
+post:
+  tags:
+    - Operations - Import System
+  summary: Get the status of the ADD_CLUSTER diagnostic check issues as a part of import system operation.
+  description: Get the ADD_CLUSTER diagostic check status using the Id.
+  operationId: getImportSystemDiagnosticCheckById
+  produces:
+    - "application/json"
+  parameters:
+    - name: diagnosticCheckId
+      in: path
+      description: Id of diagnostic check operation.
+      required: true
+      type: string
+    - in: body
+      name: Remote Manager Credentials
+      description: Credentials of the remote manager to fetch the status of the diagnostic check. 
+      schema:
+        $ref: '#manager-credentials'
+  responses:
+    200:
+      description: successful operation
+      schema:
+        $ref: '../diagnosticChecks/main.yml#diagnostic-check-response' 
+    404:
+      description: ADD_CLUSTER Diagnostic Check operation status not found
+
+manager-credentials:
+  type: object
+  properties:
+    managerHost: 
+      description: Hostname/IP of the remote QGM cluster
+      type: string
+    managerUser:
+      description: Username to access remote QGM cluster's REST API
+      type: string
+    managerPass:
+      description: managerPass to access remote QGM cluster's REST API
+      type: string

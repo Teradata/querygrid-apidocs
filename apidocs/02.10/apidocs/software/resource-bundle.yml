@@ -1,0 +1,23 @@
+get:
+  tags:
+    - Software
+  summary: Download resource-bundle by Id
+  description: Download the software resource-bundle using the Id
+  produces:
+    - application/json
+  parameters:
+    - name: id
+      in: path
+      description: Id of software of the resource bundle to download
+      required: true
+      type: string
+    - name: locale
+      in: query
+      description: The locale of the resource bundle to get
+  responses:
+    200:
+      description: Successful Operation
+    404:
+      description: No software found with the specified Id
+      schema:
+        $ref: '../error.yml#not-found'

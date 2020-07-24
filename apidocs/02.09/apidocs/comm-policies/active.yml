@@ -1,0 +1,78 @@
+get:
+  tags:
+    - Config - Communication Policies
+  summary: Get the active version for a Communication Policy 
+  produces:
+    - application/json
+  parameters:
+    - name: id
+      in: path
+      description: ID of the Communication Policy
+      required: true
+      type: string
+  responses:
+    200:
+      description: Successful Operation
+      schema:
+        $ref: 'main.yml#comm-policy'
+    404:
+      description: Not Found
+      schema:
+        $ref: '../error.yml#not-found'
+        
+put:
+  tags:
+    - Config - Communication Policies
+  summary: Update the active Communication Policy version
+  produces:
+    - application/json
+  parameters:
+    - name: id
+      in: path
+      description: ID of the Communication Policy
+      required: true
+      type: string
+    - name: communication policy
+      in: body
+      schema:
+        $ref: 'main.yml#post-comm-policy'
+  responses:
+    200:
+      description: Successful Operation
+      schema:
+        $ref: 'main.yml#comm-policy-version'
+    404:
+      description: Not Found
+      schema:
+        $ref: '../error.yml#not-found'
+        
+patch:
+  tags:
+    - Config - Communication Policies
+  summary: Activate pending or previous communication policy version
+  produces:
+    - application/json
+  parameters:
+    - name: id
+      in: path
+      description: ID of the Communication Policy
+      required: true
+      type: string
+    - name: versionId
+      in: body
+      schema:
+         type: string
+         example: "db6f0a2e-a368-4a97-91fb-cf3f61d72704"
+      description: The version ID of the version to activate.
+  responses:
+    200:
+      description: Successful Operation
+      schema:
+        $ref: 'main.yml#post-comm-policy'
+    404:
+      description: Not Found
+      schema:
+        $ref: '../error.yml#not-found'
+        
+
+        

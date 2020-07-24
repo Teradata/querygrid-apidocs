@@ -1,0 +1,36 @@
+get:
+  tags:
+    - Operations - Nodes Auto Install
+  summary: Automatic node installation status
+  description: Get the status of the automatic node installation status using installationId
+  operationId: postNodeAutoInstallById
+  produces:
+    - "application/json"
+  parameters:
+    - name: installationId
+      in: path
+      description: Id of the auto-install operation.
+      required: true
+      type: string
+  responses:
+    '200':
+      description: Successful Operation
+      schema:
+        $ref: 'main.yml#auto-install-response'
+    400:
+      description: Specified installationId not found
+delete:
+  tags:
+    - Operations - Nodes Auto Install
+  summary: Abort automatic node installation operation
+  description: Abort  the auto-install operation using installationId
+  operationId: deleteNodeAutoInstallById
+  parameters:
+    - name: installationId
+      in: path
+      description: Id of the auto-install operation.
+      required: true
+      type: string
+  responses:
+    200:
+      description: Auto-install operation aborted.

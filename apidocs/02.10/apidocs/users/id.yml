@@ -1,0 +1,69 @@
+get:
+  tags:
+    - Users
+  summary: Get a User by ID
+  produces:
+    - application/json
+  parameters:
+    - name: username
+      in: path
+      description: Username of account to get
+      required: true
+      type: string
+  responses:
+    200:
+      description: Successful Operation
+      schema:
+        $ref: 'main.yml#user'
+    404:
+      description: Not Found
+      schema:
+        $ref: '../error.yml#not-found'
+        
+put:
+  tags:
+    - Users
+  summary: Update a User
+  parameters:
+    - name: username
+      in: path
+      description: Username of account to update 
+      required: true
+      type: string
+    - in: body
+      name: user
+      schema:
+        $ref: 'main.yml#user'
+  responses:
+    200:
+      description: Successful Operation
+      schema:
+        $ref: 'main.yml#user'
+    400:
+      description: Bad Request
+      schema:
+        $ref: '../error.yml#bad-request'
+    404:
+      description: Not Found
+      schema:
+        $ref: '../error.yml#not-found'
+      
+        
+delete:
+  tags:
+    - Users
+  summary: Delete a User by ID
+  parameters:
+    - name: username
+      in: path
+      description: Username of account to delete 
+      required: true
+      type: string
+  responses:
+    200:
+      description: Successful Operation
+    404:
+      description: Not Found
+      schema:
+        $ref: '../error.yml#not-found'
+      

@@ -1,0 +1,68 @@
+get:
+  tags:
+    - Config - Links
+  summary: Get the pending version for a Link 
+  produces:
+    - application/json
+  parameters:
+    - name: id
+      in: path
+      description: ID of the Link
+      required: true
+      type: string
+  responses:
+    200:
+      description: Successful Operation
+      schema:
+        $ref: 'main.yml#pending-link'
+    404:
+      description: Not Found
+      schema:
+        $ref: '../error.yml#not-found'
+        
+put:
+  tags:
+    - Config - Links
+  summary: Update the pending Link version
+  produces:
+    - application/json
+  parameters:
+    - name: id
+      in: path
+      description: ID of the Link
+      required: true
+      type: string
+    - name: link
+      in: body
+      schema:
+        $ref: 'main.yml#post-link'
+  responses:
+    200:
+      description: Successful Operation
+      schema:
+        $ref: 'main.yml#post-link'
+    404:
+      description: Not Found
+      schema:
+        $ref: '../error.yml#not-found'
+        
+delete:
+  tags:
+    - Config - Links
+  summary: Delete the pending Link version
+  produces:
+    - application/json
+  parameters:
+    - name: id
+      in: path
+      description: ID of the Link
+      required: true
+      type: string
+  responses:
+    200:
+      description: Successful Operation
+    404:
+      description: Not Found
+      schema:
+        $ref: '../error.yml#not-found'
+        

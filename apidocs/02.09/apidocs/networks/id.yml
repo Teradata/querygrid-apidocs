@@ -1,0 +1,84 @@
+get:
+  tags:
+    - Config - Networks
+  summary: Get a Network by ID
+  produces:
+    - application/json
+  parameters:
+    - name: id
+      in: path
+      description: ID of the Network
+      required: true
+      type: string
+    - in: query
+      name: extraInfo
+      type: boolean
+      description: Provide extra details (in _extraInfo section) about the network.
+  responses:
+    200:
+      description: Successful Operation
+      schema:
+        $ref: 'main.yml#network'
+    404:
+      description: Not Found
+      schema:
+        $ref: '../error.yml#not-found'
+        
+patch:
+  tags:
+    - Config - Networks
+  summary: Update Network name or description
+  parameters:
+    - name: id
+      in: path
+      description: ID of the Network to update 
+      required: true
+      type: string
+    - in: body
+      name: network
+      schema:
+        type: object
+        properties:
+          name:
+            description: The name of the network.
+            type: string
+            example: Network1
+          description:
+            description: The description of the network.
+            type: string
+            example: Production network used by production workloads.  
+  responses:
+    200:
+      description: Successful Operation
+      schema:
+        $ref: 'main.yml#network'
+    400:
+      description: Bad Request
+      schema:
+        $ref: '../error.yml#bad-request'
+    404:
+      description: Not Found
+      schema:
+        $ref: '../error.yml#not-found'
+      
+        
+delete:
+  tags:
+    - Config - Networks
+  summary: Delete a Network by ID
+  parameters:
+    - name: id
+      in: path
+      description: ID of the Network to delete 
+      required: true
+      type: string
+  responses:
+    200:
+      description: Successful Operation
+    404:
+      description: Not Found
+      schema:
+        $ref: '../error.yml#not-found'
+        
+        
+      

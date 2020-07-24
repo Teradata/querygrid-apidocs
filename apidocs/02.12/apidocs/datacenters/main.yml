@@ -1,0 +1,74 @@
+get:
+  tags:
+    - Config - Data Centers
+  summary: Get all Data Centers
+  produces:
+      - "application/json"
+  parameters:
+  - name: filterByName
+    in: query
+    description: Get data center associated with the specified name.
+    required: false
+    type: string
+  responses:
+    200:
+      description: Successful operation
+      schema:
+        type: array
+        items: 
+          $ref: '#data-center'
+          
+post:
+  tags:
+    - Config - Data Centers
+  summary: Create a new Data Center
+  consumes:
+    - "application/json"
+  produces:
+    - "application/json"
+  parameters:
+  - in: body
+    name: datacenter
+    schema:
+      $ref: '#post-data-center'
+  responses:
+    201:
+      description: Data Center created
+      schema:
+        $ref: '#data-center'
+    400:
+      description: Bad Request
+      schema:
+        $ref: '../error.yml#bad-request'
+          
+data-center:
+  type: object
+  properties:
+    id: 
+      description: The auto-generated ID of the data center.
+      type: string
+      example: "f5d72daf-aa8f-486c-8058-4fc587c0b471"
+    lastModified: 
+      description: The last time this data center was modified.
+      type: string
+      example: "2018-01-31T17:59:22.055+0000"
+    name:
+      description: The name of the data center.
+      type: string
+      example: San Diego
+    description:
+      description: A description of the data center.
+      type: string
+      example: Data center located in San Diego, CA.
+       
+post-data-center:
+  type: object
+  properties:
+    name:
+      description: The name of the data center.
+      type: string
+      example: San Diego
+    description:
+      description: A description of the data center.
+      type: string
+      example: Data center located in San Diego, CA.

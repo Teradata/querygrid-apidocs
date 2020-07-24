@@ -1,0 +1,68 @@
+get:
+  tags:
+    - Config - Bridges
+  summary: Get a Bridges by ID
+  produces:
+    - application/json
+  parameters:
+    - name: id
+      in: path
+      description: ID of the Bridge
+      required: true
+      type: string
+  responses:
+    200:
+      description: Successful Operation
+      schema:
+        $ref: 'main.yml#bridge'
+    404:
+      description: Not Found
+      schema:
+        $ref: '../error.yml#not-found'
+        
+put:
+  tags:
+    - Config - Bridges
+  summary: Update a Bridge
+  parameters:
+    - name: id
+      in: path
+      description: ID of the Bridge to update 
+      required: true
+      type: string
+    - in: body
+      name: bridge
+      schema:
+        $ref: 'main.yml#post-bridge'
+  responses:
+    200:
+      description: Successful Operation
+      schema:
+        $ref: 'main.yml#bridge'
+    400:
+      description: Bad Request
+      schema:
+        $ref: '../error.yml#bad-request'
+    404:
+      description: Not Found
+      schema:
+        $ref: '../error.yml#not-found'        
+        
+delete:
+  tags:
+    - Config - Bridges
+  summary: Delete a Bridge by ID
+  parameters:
+    - name: id
+      in: path
+      description: ID of the Bridge to delete 
+      required: true
+      type: string
+  responses:
+    200:
+      description: Successful Operation
+    404:
+      description: Not Found
+      schema:
+        $ref: '../error.yml#not-found'
+      

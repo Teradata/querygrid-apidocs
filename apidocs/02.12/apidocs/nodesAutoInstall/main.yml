@@ -1,0 +1,162 @@
+post:
+  tags:
+    - Operations - Nodes Auto Install
+  summary: Automatic node installation
+  description: Install the node package automatically.
+  operationId: postNodeAutoInstall
+  consumes:
+    - "application/json"
+  produces:
+    - "application/json"
+  parameters:
+  - name: auto-install-request
+    in: body
+    schema:
+      $ref: '#auto-install-request'
+  responses:
+    200:
+      description: Successful Operation
+      schema:
+        $ref: '#auto-install-response'
+        
+        
+auto-install-request:
+  type: object
+  properties:
+    systemId:
+      description: The system to which nodes will be added.
+      type: string
+      nullable: true
+    nodes:
+      description: This list of node hostNames or IPs to install
+      type: array
+      nullable: true
+      items:
+        type: string
+        nullable: true
+    username:
+      description: The SSH username
+      type: string
+      nullable: true
+    password:
+      description: The SSH password
+      type: string
+      nullable: true
+    sshKey:
+      description: The SSH key
+      type: string
+      nullable: true
+    concurrency:
+      description: The number of installs that can be performed at the same time.
+      type: integer
+      format: int32
+      nullable: true
+    clusterOption:
+      description: Cluster option for the host QGM cluster. Applicable for QueryGrid version 02.11+. The primary QGM cluster determines 
+        the version of the tdqg-node software to run on the data nodes and can run pre-02.09 versions of the QueryGrid fabric. It is always 
+        the first QGM cluster the tdqg-node service is configured to serve. The Secondary QGM clusters are always added after 
+        the tdqg-node service has been configured with a Primary QGM cluster. The tdqg-node software version selected by the secondary 
+        QueryGrid Manager cluster has no effect. The secondary QGM cluster cannot run pre-02.09 versions of the QueryGrid fabric.
+      type: string
+      nullable: true
+      enum:
+        - PRIMARY
+        - SECONDARY
+        - EXCLUSIVE_PRIMARY
+
+auto-install-response:
+  type: object
+  properties:
+    installationId:
+      description: UUID representing the installation operation
+      type: string
+    managerId:
+      description: The ID of the QGM handling the installation operation
+      type: string
+    clusterOption:
+      description: Cluster option for the host QGM cluster. Applicable for QueryGrid version 02.11+. The primary QGM cluster determines 
+        the version of the tdqg-node software to run on the data nodes and can run pre-02.09 versions of the QueryGrid fabric. It is always 
+        the first QGM cluster the tdqg-node service is configured to serve. The Secondary QGM clusters are always added after 
+        the tdqg-node service has been configured with a Primary QGM cluster. The tdqg-node software version selected by the secondary 
+        QueryGrid Manager cluster has no effect. The secondary QGM cluster cannot run pre-02.09 versions of the QueryGrid fabric.
+      type: string
+      nullable: true
+      enum:
+        - PRIMARY
+        - SECONDARY
+        - EXCLUSIVE_PRIMARY
+    systemId:
+      description: The ID of the system that is being installed.
+      type: string
+    status:
+      description: The overall status of the install
+      type: string
+    startTime: 
+      description: The start time of the installation
+      type: string
+      format: date
+    endTime:
+      description: The finish time of the installation
+      type: string
+      format: date
+    lastModified:
+      description: The last modification time of the status
+      type: string
+      format: date
+    totalCount:
+      description: The number of installations performed
+      type: integer
+      format: int32
+    inProgressCount:
+      description: The number of installations currently in progress
+      type: integer
+      format: int32
+    successCount:
+      description: The number of successful installations
+      type: integer
+      format: int32
+    errorCount: 
+      description: The number of failed installations
+      type: integer
+      format: int32
+    pendingCount:
+      description: The number of pending installations
+      type: integer
+      format: int32
+    abortCount:
+      description: The number of failed installations
+      type: integer
+      format: int32
+    nodes:
+      description: A List that contains the status information for each of the nodes
+      type: array
+      items: 
+        $ref: '#auto-install-node-status'
+        
+auto-install-node-status:
+  type: object
+  properties:
+    hostname:
+      description: The hostName or IP of the node
+      type: string
+    status:
+      description: The Status of the installation
+      type: string
+      enum:
+        - PENDING
+        - SUCCESS
+        - FAILURE
+        - ABORTED
+        - IN_PROGRESS
+        - UNKNOWN
+    startTime:
+      description: The start time of the installation operation
+      type: string
+      format: date
+    endTime:
+      description: The finish time of the installation operation
+      type: string
+      format: date
+    error:
+      description: The error associated with the failure if the installation failed
+      type: string

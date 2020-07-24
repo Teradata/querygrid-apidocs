@@ -1,0 +1,164 @@
+get:
+  tags:
+    - Config - Systems
+  summary: Get all Systems
+  produces:
+      - "application/json"
+  parameters:
+  - in: query
+    name: extraInfo
+    type: boolean
+    description: Provide extra details (in _extraInfo section) about the system.
+  responses:
+    200:
+      description: Successful operation
+      schema:
+        type: array
+        items: 
+          $ref: '#system'
+          
+post:
+  tags:
+    - Config - Systems
+  summary: Create a new System
+  consumes:
+    - "application/json"
+  produces:
+    - "application/json"
+  parameters:
+  - in: body
+    name: system
+    schema:
+      $ref: '#post-system'
+  responses:
+    201:
+      description: System created
+      schema:
+        $ref: '#system'
+    400:
+      description: Bad Request
+      schema:
+        $ref: '../error.yml#bad-request'
+          
+system:
+  type: object
+  properties:
+    id: 
+      description: The auto-generated ID of the system.
+      type: string
+      example: "f5d72daf-aa8f-486c-8058-4fc587c0b471"
+    lastModified: 
+      description: The last time this system was modified.
+      type: string
+      example: "2018-01-31T17:59:22.055+0000"
+    name:
+      description: The name of the system.
+      type: string
+      example: TD1
+    description:
+      description: A description of the system.
+      type: string
+      example: Production Teradata System located in San Diego.
+    dataCenterId:
+      description: The ID of the data center the system is located in.
+      type: string
+      example: "a05acd24-4cfd-4f08-a1fa-86341f21c3ce"
+    softwareVersion:
+      description: The version of the tdqg-node package that should be installed on all nodes of the system.
+      type: string
+      example: "02.05.00.01"
+    maximumMemoryPerNode:
+      description: The maximum memory per node in bytes allowed to be used by QueryGrid queries.
+      type: number
+      example: 1073741824
+    bridgeOnly:
+      description: Flags if this system is a bridge only system (e.g. no local data source)
+      type: boolean
+      example: false
+    proxySupportType:
+      description: Flags if a proxy should be used by this system for connecting to QueryGrid Manager.
+      type: string
+      enum: [NO_PROXY, LOCAL_PROXY, BRIDGE_PROXY]
+      example: LOCAL_PROXY
+    proxyPort:
+      description: The port number to listen for proxying connections. Required with LOCAL_PROXY.
+      type: number
+      example: 9444
+    proxyNetworkId:
+      description: The UUID of a network rule to specify the network to use to enable proxy support. The default is to use the byn1 network interface automatically.
+      type: string
+      example: "b05bcr27-4cfd-4f08-a1fa-86341f21c3ce"
+    proxyBridgeId:
+      description: The ID of a remote bridge system (edge nodes) to use to proxy connections to QueryGrid Manager. Bridge system must have proxySupport = LOCAL_PROXY specified.
+      type: string
+      example: "c05der27-4cfd-4f08-a1fa-86341f21c7yt"
+    _extraInfo:
+      $ref: '#system-extra-info'
+       
+post-system:
+  type: object
+  properties:
+    name:
+      description: The name of the system.
+      type: string
+      example: TD1
+    description:
+      description: A description of the system.
+      type: string
+      example: Production Teradata System located in San Diego.
+    dataCenterId:
+      description: The ID of the data center the system is located in.
+      type: string
+      example: "a05acd24-4cfd-4f08-a1fa-86341f21c3ce"
+    softwareVersion:
+      description: The version of the tdqg-node package that should be installed on all nodes of the system.
+      type: string
+      example: "02.05.00.01"
+    maximumMemoryPerNode:
+      description: The maximum memory per node in bytes allowed to be used by QueryGrid queries.
+      type: number
+      example: 1073741824
+    bridgeOnly:
+      description: Flags if this system is a bridge only system (e.g. no local data source)
+      type: boolean
+      example: false
+    proxySupportType:
+      description: Flags if a proxy should be used by this system for connecting to QueryGrid Manager.
+      type: string
+      enum: [NO_PROXY, LOCAL_PROXY, BRIDGE_PROXY]
+      example: LOCAL_PROXY
+    proxyPort:
+      description: The port number to listen for proxying connections. Required with LOCAL_PROXY.
+      type: number
+      example: 9444
+    proxyNetworkId:
+      description: The UUID of a network rule to specify the network to use to enable proxy support. The default is to use the byn1 network interface automatically.
+      type: string
+      example: "b05bcr27-4cfd-4f08-a1fa-86341f21c3ce"
+    proxyBridgeId:
+      description: The ID of a remote bridge system (edge nodes) to use to proxy connections to QueryGrid Manager. Bridge system must have proxySupport = LOCAL_PROXY specified.
+      type: string
+      example: "c05der27-4cfd-4f08-a1fa-86341f21c7yt"
+      
+system-extra-info:
+  type: object
+  properties:
+    nodesOnline:
+      type: number
+      description: The number of nodes online for the system
+      example: 104
+    nodesOffline:
+      type: number
+      description: The number of nodes offline for the system
+    dataCenterName:
+      type: string
+      description: The name of the data center the system is located in.
+      example: DataCenter1
+    lastInstallOperationId:
+      type: string
+      description: The ID of the last auto-install operation performed for the system.
+      example: c88dd660-575b-4ec5-857e-c2772b5a9794
+    lastInstallStatus:
+      type: string
+      description: The status of the last auto-install operation performed for the system.
+      example: SUCCESS

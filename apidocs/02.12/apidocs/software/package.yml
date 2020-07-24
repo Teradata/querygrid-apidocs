@@ -1,0 +1,20 @@
+get:
+  tags:
+    - Software
+  summary: Download software by Id
+  description: Download the software using the Id
+  produces:
+    - application/octet-stream
+  parameters:
+    - name: id
+      in: path
+      description: Id of software to download
+      required: true
+      type: string
+  responses:
+    200:
+      description: Successful Operation
+    404:
+      description: No software found with the specified Id
+      schema:
+        $ref: '../error.yml#not-found'

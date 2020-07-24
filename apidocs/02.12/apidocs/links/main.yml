@@ -1,0 +1,371 @@
+get:
+  tags:
+    - Config - Links
+  summary: Get all Links 
+  produces:
+      - "application/json"
+  parameters:
+  - in: query
+    name: flatten
+    description: Flatten out the active, pending, and previous versions into array elements instead of nesting them.
+  - in: query
+    name: extraInfo
+    type: boolean
+    description: Provide extra details (in _extraInfo section) about the link.
+  - name: filterByName
+    in: query
+    description: Get link associated with the specified name.
+    required: false
+    type: string
+  responses:
+    200:
+      description: Successful operation
+      schema:
+        type: array
+        items: 
+          $ref: '#link'
+          
+post:
+  tags:
+    - Config - Links 
+  summary: Create a new Link 
+  consumes:
+    - "application/json"
+  produces:
+    - "application/json"
+  parameters:
+  - in: body
+    name: link
+    schema:
+      $ref: '#post-link'
+  responses:
+    201:
+      description: Link created
+      schema:
+        $ref: '#link'
+    400:
+      description: Bad Request
+      schema:
+        $ref: '../error.yml#bad-request'
+
+link-metadata:
+  type: object
+  properties:
+    id: 
+      description: The auto-generated ID of the link.
+      type: string
+      example: "f5d72daf-aa8f-486c-8058-4fc587c0b471"
+    lastModified: 
+      description: The last time the link was modified.
+      type: string
+      example: "2018-01-31T17:59:22.055+0000"
+    name:
+      description: The name of the link.
+      type: string
+      example: Link1
+    description:
+      description: A description of the link.
+      type: string
+      example: Production link used by production workloads.
+     
+link:
+  allOf:
+    - $ref: '#link-metadata'
+    - type: object
+      properties:
+        previous:
+          $ref: '#link-version'
+        active:
+          $ref: '#link-version'
+        pending: 
+          $ref: '#link-version'
+
+active-link:
+  allOf:
+    - $ref: '#link-metadata'
+    - $ref: '#link-version'
+    - type: object
+      properties:
+        version:
+          description: The version of the link.
+          type: string
+          example: "ACTIVE"
+
+pending-link:
+  allOf:
+    - $ref: '#link-metadata'
+    - $ref: '#link-version'
+    - type: object
+      properties:
+        version:
+          description: The version of the link.
+          type: string
+          example: "PENDING"
+
+previous-link:
+  allOf:
+    - $ref: '#link-metadata'
+    - $ref: '#link-version'
+    - type: object
+      properties:
+        version:
+          description: The version of the link.
+          type: string
+          example: "PREVIOUS"
+
+post-link:
+  type: object
+  properties:
+    name:
+      description: The name of the link.
+      type: string
+      example: Link1
+    description:
+      description: A description of the link.
+      type: string
+      example: Production link used by production workloads.
+    fabricId:
+      description: The ID of the fabric the link belongs to.
+      type: string
+      example: 22995fad-13e8-42fd-82c6-31f2390fb440
+    initiatorConnectorId:
+      description: The ID of the initiating connector.
+      type: string
+      example: 33946bcd-355b-2ac3-2bde-91f2390fb412
+    initiatorProperties:
+      type: object
+      example: { "property1": "value1",  "property2": "value2" }
+      description: The initiating connector properties to set or override.
+    overridableInitiatorPropertyNames:
+      description: The initiator connector properties which can be overridden by the user.
+      type: array
+      example: [ "overridableProperty1", "overridableProperty2" ]
+    initiatorNetworkId:
+      description: The network to use on the initiating system. null value implies use any available route.
+      type: string
+      example: 23b9f4a9-223d-424d-a78b-ce378be62e24
+    initiatorThreadsPerQuery:
+      description: The number of threads to use per query by the initiator
+      type: number
+      example: 1
+    targetConnectorId:
+      description: The ID of the initiating connector.
+      type: string
+      example: 33946bcd-355b-2ac3-2bde-91f2390fb412
+    targetProperties:
+      type: object
+      example: { "property1": "value1",  "property2": "value2" }
+      description: The target connector properties to set or override.
+    overridableTargetPropertyNames:
+      description: The target connector properties which can be overridden by the user.
+      type: array
+      example: [ "overridableProperty1", "overridableProperty2" ]
+    targetNetworkId:
+      description: The network to use on the target system. null value implies use any available route.
+      type: string
+      example: 23b9f4a9-223d-424d-a78b-ce378be62e24
+    targetThreadsPerQuery:
+      description: The number of threads to use per query by the initiator
+      type: number
+      example: 1
+    commPolicyId:
+      description: The ID of the communication policy to use for communication with first bridge or target.
+      type: string
+      example: 707f34d6-08b7-4030-962e-94e3fa98a6c2
+    userMappingId:
+      description: The user mapping to apply. null value implies no user mapping.
+      type: string
+      example: 94ce9883-4910-4914-97cb-931439309958
+    usersToTroubleshoot:
+      type: object
+      description: The database users to set specific log levels on.
+      example: { "user1" : "INFO", "user2": "DEBUG", "user3" : "VERBOSE" }
+    bridges:
+      type: array
+      items:
+        $ref: '#bridge'  
+      
+bridge:
+  type: object
+  properties:
+    bridgeId:
+      description: The ID of the bridge.
+      type: string
+      example: 070658e5-a8f6-496c-870c-84e55c04880f
+    initiatorNetworkId:
+      description: The ID of the network for the initiating side of bridge, else NULL for Any. 
+      type: string
+      example: a8f8b09a-512c-4bf3-8a90-26a4c46c65da
+    targetNetworkId:
+      description: The ID of the network for the target side of bridge 1, else NULL for Any. 
+      type: string
+      example: e68b5277-d385-4763-bcf5-e68a96aa57ef
+    commPolicyId:
+      description: The ID of the communication policy to use between the next bridge or target.
+      type: string
+      example: 707f34d6-08b7-4030-962e-94e3fa98a6c2
+    threadsPerQuery:
+      description: The number of threads to use per query by the bridge
+      type: number
+      example: 1
+      
+      
+link-version:
+  type: object
+  properties:
+    versionId:
+      description: The ID associated with the active link version.
+      example: 22995fad-13e8-42fd-82c6-31f2390fb440
+    lastModified:
+      description: The last time this version was modified.
+      example: "2017-12-11T17:52:01.088+0000" 
+    fabricId:
+      description: The ID of the fabric the link belongs to.
+      type: string
+      example: 22995fad-13e8-42fd-82c6-31f2390fb440
+    initiatorConnectorId:
+      description: The ID of the initiating connector.
+      type: string
+      example: 33946bcd-355b-2ac3-2bde-91f2390fb412
+    initiatorProperties:
+      type: object
+      example: { "property1": "value1",  "property2": "value2" }
+      description: The initiating connector properties to set or override.
+    overridableInitiatorPropertyNames:
+      description: The initiator connector properties which can be overridden by the user.
+      type: array
+      example: [ "overridableProperty1", "overridableProperty2" ]
+    initiatorNetworkId:
+      description: The network to use on the initiating system. null value implies use any available route.
+      type: string
+      example: 23b9f4a9-223d-424d-a78b-ce378be62e24
+    initiatorThreadsPerQuery:
+      description: The number of threads to use per query by the initiator
+      type: number
+      example: 1
+    targetConnectorId:
+      description: The ID of the initiating connector.
+      type: string
+      example: 33946bcd-355b-2ac3-2bde-91f2390fb412
+    targetProperties:
+      type: object
+      example: { "property1": "value1",  "property2": "value2" }
+      description: The target connector properties to set or override.
+    overridableTargetPropertyNames:
+      description: The target connector properties which can be overridden by the user.
+      type: array
+      example: [ "overridableProperty1", "overridableProperty2" ]
+    targetNetworkId:
+      description: The network to use on the target system. null value implies use any available route.
+      type: string
+      example: 23b9f4a9-223d-424d-a78b-ce378be62e24
+    targetThreadsPerQuery:
+      description: The number of threads to use per query by the initiator
+      type: number
+      example: 1
+    commPolicyId:
+      description: The ID of the communication policy to use for communication with first bridge or target.
+      type: string
+      example: 707f34d6-08b7-4030-962e-94e3fa98a6c2
+    userMappingId:
+      description: The user mapping to apply. null value implies no user mapping.
+      type: string
+      example: 94ce9883-4910-4914-97cb-931439309958
+    usersToTroubleshoot:
+      type: object
+      description: The database users to set specific log levels on.
+      example: { "user1" : "INFO", "user2": "DEBUG", "user3" : "VERBOSE" }
+    bridges:
+      type: array
+      items:
+        $ref: '#bridge'
+    _extraInfo:
+      $ref: '#link-extra-info'
+      
+link-version-update:
+  type: object
+  properties:
+    fabricId:
+      description: The ID of the fabric the link belongs to.
+      type: string
+      example: 22995fad-13e8-42fd-82c6-31f2390fb440
+    initiatorConnectorId:
+      description: The ID of the initiating connector.
+      type: string
+      example: 33946bcd-355b-2ac3-2bde-91f2390fb412
+    initiatorProperties:
+      type: object
+      example: { "property1": "value1",  "property2": "value2" }
+      description: The initiating connector properties to set or override.
+    overridableInitiatorPropertyNames:
+      description: The initiator connector properties which can be overridden by the user.
+      type: array
+      example: [ "overridableProperty1", "overridableProperty2" ]
+    initiatorNetworkId:
+      description: The network to use on the initiating system. null value implies use any available route.
+      type: string
+      example: 23b9f4a9-223d-424d-a78b-ce378be62e24
+    initiatorThreadsPerQuery:
+      description: The number of threads to use per query by the initiator
+      type: number
+      example: 1
+    targetConnectorId:
+      description: The ID of the initiating connector.
+      type: string
+      example: 33946bcd-355b-2ac3-2bde-91f2390fb412
+    targetProperties:
+      type: object
+      example: { "property1": "value1",  "property2": "value2" }
+      description: The target connector properties to set or override.
+    overridableTargetPropertyNames:
+      description: The target connector properties which can be overridden by the user.
+      type: array
+      example: [ "overridableProperty1", "overridableProperty2" ]
+    targetNetworkId:
+      description: The network to use on the target system. null value implies use any available route.
+      type: string
+      example: 23b9f4a9-223d-424d-a78b-ce378be62e24
+    targetThreadsPerQuery:
+      description: The number of threads to use per query by the initiator
+      type: number
+      example: 1
+    commPolicyId:
+      description: The ID of the communication policy to use for communication with first bridge or target.
+      type: string
+      example: 707f34d6-08b7-4030-962e-94e3fa98a6c2
+    userMappingId:
+      description: The user mapping to apply. null value implies no user mapping.
+      type: string
+      example: 94ce9883-4910-4914-97cb-931439309958
+    usersToTroubleshoot:
+      type: object
+      description: The database users to set specific log levels on.
+      example: { "user1" : "INFO", "user2": "DEBUG", "user3" : "VERBOSE" }
+    bridges:
+      type: array
+      items:
+        $ref: '#bridge'
+      
+link-extra-info:
+  type: object
+  properties:
+    initiatingConnectorName:
+      description: The name of the initiating connector
+      type: string
+    initiatingSystemName:
+      description: The name of the initiating system
+      type: string
+    targetConnectorName:
+      description: The name of the target connector
+      type: string
+    targetSystemName:
+      description: The name of the target system
+      type: string
+    commPolicyName:
+      description: The name of the comm policy
+      type: string
+    fabricName:
+      description: The name of the fabric.
+      type: string
+   
+    

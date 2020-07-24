@@ -1,0 +1,34 @@
+get:
+  tags:
+    - Issues
+  summary: Find issue by Id
+  description: Get the issue using the Id
+  produces:
+    - application/json
+  parameters:
+    - name: id
+      in: path
+      description: Id of issue to get
+      required: true
+      type: string
+  responses:
+    200:
+      description: Successful Operation
+      schema:
+        $ref: 'main.yml#issue'
+    404:
+      description: No issue found with the specified Id
+delete:
+  tags:
+    - Issues
+  summary: Delete issue using Id
+  description: Delete a single issue based on the Id supplied
+  parameters:
+    - name: id
+      in: path
+      description: Id of issue that needs to be deleted.
+      required: true
+      type: string
+  responses:
+    200:
+      description: issue deleted

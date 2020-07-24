@@ -1,0 +1,34 @@
+get:
+  tags:
+    - Software
+  summary: Find software by Id
+  description: Get the software using the Id
+  produces:
+    - application/json
+  parameters:
+    - name: id
+      in: path
+      description: Id of software to get
+      required: true
+      type: string
+  responses:
+    200:
+      description: Successful Operation
+      schema:
+        $ref: 'main.yml#software'
+    404:
+      description: No software found with the specified Id
+delete:
+  tags:
+    - Software
+  summary: Delete software using Id
+  description: Delete a single software based on the Id supplied
+  parameters:
+    - name: id
+      in: path
+      description: Id of software that needs to be deleted.
+      required: true
+      type: string
+  responses:
+    200:
+      description: software deleted

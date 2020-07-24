@@ -1,0 +1,42 @@
+get:
+  tags:
+    - Config - Networks
+  summary: Get the previous version for a Network 
+  produces:
+    - application/json
+  parameters:
+    - name: id
+      in: path
+      description: ID of the Network
+      required: true
+      type: string
+  responses:
+    200:
+      description: Successful Operation
+      schema:
+        $ref: 'main.yml#previous-network'
+    404:
+      description: Not Found
+      schema:
+        $ref: '../error.yml#not-found'
+        
+delete:
+  tags:
+    - Config - Networks
+  summary: Delete the previous Network version
+  produces:
+    - application/json
+  parameters:
+    - name: id
+      in: path
+      description: ID of the Network
+      required: true
+      type: string
+  responses:
+    200:
+      description: Successful Operation
+    404:
+      description: Not Found
+      schema:
+        $ref: '../error.yml#not-found'
+        

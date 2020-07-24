@@ -1,0 +1,25 @@
+get:
+  tags:
+    - Support-Archive
+  summary: Generate config support archive
+  description: Generate config support archive containing config information collected from QGM.
+  produces:
+    - application/octet-stream
+    - application/json
+  responses:
+    200:
+      description: Successful Operation
+      content:
+        application/octet-stream:
+          schema:
+            type: file
+            format: binary
+    404:
+      description: Unable to or skipped generation of support archive.
+      content:
+        application/json:
+          schema:
+            type: object
+    507:
+      description: QueryGrid Manager is running low on disk space.
+      

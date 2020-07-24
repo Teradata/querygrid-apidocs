@@ -1,0 +1,34 @@
+post:
+  tags:
+    - Operations - Bulk Delete
+  summary: Bulk delete configuration objects.
+  consumes:
+    - "application/json"
+  produces:
+    - "application/json"
+  parameters:
+    - name: BulkDeleteRequest
+      in: body
+      type: object
+      schema:
+        $ref: '#bulk-delete-request'
+  responses:
+    200:
+      description: Configuration objects were deleted successfully.
+    400:
+      description: Bad Request
+
+bulk-delete-request:
+  type: object
+  properties:
+    configType: 
+      description: Type of the configuration object. 
+      type: enum
+      enum:
+        - NODE
+        - ISSUE
+    ids:
+      type: array
+      items:
+        type: string        
+      example: [ 23b9f4a9-223d-424d-a78b-ce378be62e24, 8e2ad797-60a3-4859-bc7c-bf8bed42e085 ]

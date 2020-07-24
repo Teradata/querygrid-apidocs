@@ -1,0 +1,39 @@
+get:
+  tags:
+    - Nodes
+  summary: Find node by Id
+  description: Get the node using the Id
+  operationId: getNodeById
+  produces:
+    - application/json
+  parameters:
+    - name: id
+      in: path
+      description: Id of node to get
+      required: true
+      type: string
+  responses:
+    200:
+      description: Successful Operation
+      schema:
+        $ref: 'main.yml#node'
+    404:
+      description: No node found with the specified Id
+delete:
+  tags:
+    - Nodes
+  summary: Delete node using Id
+  description: Delete a single node based on the Id supplied
+  operationId: deleteNodeById
+  parameters:
+    - name: id
+      in: path
+      description: Id of node that needs to be deleted.
+      required: true
+      type: string
+  responses:
+    200:
+      description: node deleted
+    404:
+      description: No node found with the specified Id
+      

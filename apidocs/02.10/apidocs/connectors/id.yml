@@ -1,0 +1,88 @@
+get:
+  tags:
+    - Config - Connectors
+  summary: Get a Connector by ID
+  produces:
+    - application/json
+  parameters:
+    - name: id
+      in: path
+      description: ID of the Connector
+      required: true
+      type: string
+    - in: query
+      name: extraInfo
+      type: boolean
+      description: Provide extra details (in _extraInfo section) about the connector.
+    - in: query
+      name: fabricVersion
+      type: string
+      description: The fabric versionId to use when providing _extraInfo.
+  responses:
+    200:
+      description: Successful Operation
+      schema:
+        $ref: 'main.yml#connector'
+    404:
+      description: Not Found
+      schema:
+        $ref: '../error.yml#not-found'
+
+patch:
+  tags:
+    - Config - Connectors
+  summary: Update Connector name or description
+  parameters:
+    - name: id
+      in: path
+      description: ID of the Connector to update 
+      required: true
+      type: string
+    - in: body
+      name: connector
+      schema:
+        type: object
+        properties:
+          name:
+            description: The name of the connector.
+            type: string
+            example: Connector1
+          description:
+            description: The description of the connector.
+            type: string
+            example: Production connector used by production workloads.  
+  responses:
+    200:
+      description: Successful Operation
+      schema:
+        $ref: 'main.yml#connector'
+    400:
+      description: Bad Request
+      schema:
+        $ref: '../error.yml#bad-request'
+    404:
+      description: Not Found
+      schema:
+        $ref: '../error.yml#not-found'
+      
+        
+delete:
+  tags:
+    - Config - Connectors
+  summary: Delete a Connector by ID
+  parameters:
+    - name: id
+      in: path
+      description: ID of the Connector to delete 
+      required: true
+      type: string
+  responses:
+    200:
+      description: Successful Operation
+    404:
+      description: Not Found
+      schema:
+        $ref: '../error.yml#not-found'
+        
+        
+      

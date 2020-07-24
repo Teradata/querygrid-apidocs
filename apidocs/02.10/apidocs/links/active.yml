@@ -1,0 +1,78 @@
+get:
+  tags:
+    - Config - Links
+  summary: Get the active version for a Link 
+  produces:
+    - application/json
+  parameters:
+    - name: id
+      in: path
+      description: ID of the Link
+      required: true
+      type: string
+  responses:
+    200:
+      description: Successful Operation
+      schema:
+        $ref: 'main.yml#active-link'
+    404:
+      description: Not Found
+      schema:
+        $ref: '../error.yml#not-found'
+        
+put:
+  tags:
+    - Config - Links
+  summary: Update the active Link version
+  produces:
+    - application/json
+  parameters:
+    - name: id
+      in: path
+      description: ID of the Link
+      required: true
+      type: string
+    - name: link
+      in: body
+      schema:
+        $ref: 'main.yml#post-link'
+  responses:
+    200:
+      description: Successful Operation
+      schema:
+        $ref: 'main.yml#post-link'
+    404:
+      description: Not Found
+      schema:
+        $ref: '../error.yml#not-found'
+        
+patch:
+  tags:
+    - Config - Links
+  summary: Activate pending or previous link version
+  produces:
+    - application/json
+  parameters:
+    - name: id
+      in: path
+      description: ID of the Link
+      required: true
+      type: string
+    - name: versionId
+      in: body
+      schema:
+         type: string
+         example: "db6f0a2e-a368-4a97-91fb-cf3f61d72704"
+      description: The version ID of the version to activate.
+  responses:
+    200:
+      description: Successful Operation
+      schema:
+        $ref: 'main.yml#post-link'
+    404:
+      description: Not Found
+      schema:
+        $ref: '../error.yml#not-found'
+        
+
+        

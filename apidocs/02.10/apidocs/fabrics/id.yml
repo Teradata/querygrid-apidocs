@@ -1,0 +1,84 @@
+get:
+  tags:
+    - Config - Fabrics
+  summary: Get a Fabric by ID
+  produces:
+    - application/json
+  parameters:
+    - name: id
+      in: path
+      description: ID of the Fabric
+      required: true
+      type: string
+    - in: query
+      name: extraInfo
+      type: boolean
+      description: Provide extra details (in _extraInfo section) about the fabric.
+  responses:
+    200:
+      description: Successful Operation
+      schema:
+        $ref: 'main.yml#fabric'
+    404:
+      description: Not Found
+      schema:
+        $ref: '../error.yml#not-found'
+        
+patch:
+  tags:
+    - Config - Fabrics
+  summary: Update Fabric name or description
+  parameters:
+    - name: id
+      in: path
+      description: ID of the Fabric to update 
+      required: true
+      type: string
+    - in: body
+      name: fabric
+      schema:
+        type: object
+        properties:
+          name:
+            description: The name of the fabric.
+            type: string
+            example: Fabric1
+          description:
+            description: The description of the fabric.
+            type: string
+            example: Production fabric used by production workloads.  
+  responses:
+    200:
+      description: Successful Operation
+      schema:
+        $ref: 'main.yml#fabric'
+    400:
+      description: Bad Request
+      schema:
+        $ref: '../error.yml#bad-request'
+    404:
+      description: Not Found
+      schema:
+        $ref: '../error.yml#not-found'
+      
+        
+delete:
+  tags:
+    - Config - Fabrics
+  summary: Delete a Fabric by ID
+  parameters:
+    - name: id
+      in: path
+      description: ID of the Fabric to delete 
+      required: true
+      type: string
+  responses:
+    200:
+      description: Successful Operation
+    404:
+      description: Not Found
+      schema:
+        $ref: '../error.yml#not-found'
+        
+        
+      

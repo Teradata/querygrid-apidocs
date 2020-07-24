@@ -1,0 +1,175 @@
+post:
+  tags:
+    - Operations - Diagnostic Checks / Connector Install
+  summary: Perform a diagnostic check or connector install
+  description: Request a diagnostic check or connector install.
+  operationId: postDiagnosticCheck
+  consumes:
+      - "application/json"
+  produces:
+      - "application/json"
+  parameters:
+    - in: body
+      name: diagnostic check request
+      description: The diagnostic check request 
+      schema:
+        $ref: '#diagnostic-check-request'
+  responses:
+    200:
+      description: Successfully able to register the diagnostic check operation.
+      schema:
+        $ref: '#diagnostic-check-request'
+    400:
+      description: Bad Request
+
+      
+diagnostic-check-request:
+  type: object
+  properties:
+    type:
+      type: string
+      description: Type of diagostic check
+      enum:
+        - "LINK"
+        - "LINK_BANDWIDTH"
+        - "CONNECTOR"
+        - "CONNECTOR_INSTALL"
+    componentId:
+      type: string
+      description: Id of the link or connector to check. Link Id should be used with LINK and LINK_BANDWITH diagnostic checks,
+        and Connector ID with the CONNECTOR AND CONNECTOR_INSTALL operations.
+        To find the Id of a link use the API - /api/v1/config/links. 
+        To find the Id of a connector use the API - /api/v1/config/connectors.
+    nodeId:
+      type: string
+      description: Id of the driver node used in case of CONNECTOR_INSTALL.
+      nullable: true
+    version:
+      type: string
+      description: Version of the link or connector
+      enum:
+        - "ACTIVE"
+        - "PENDING"
+    properties:
+      description: Connector properties to use for a CONNECTOR diagnostic check. 
+          Untar the connector package and open the \<version\>/.pkgmeta/pkginfo.yaml file 
+          to look at the supported connector properties. All properties for the connector are 
+          listed in that file under “connectorProperties”. The mapping of the properties with the names used
+          in the UI and the user guide, along with descriptions, can be found in the
+          \<version\>/.pkgmeta/messages.properties file.
+      type: object
+      nullable: true
+    dataFlow:
+      type: string
+      description: The direction data flows for LINK_BANDWIDTH checks.
+      enum:
+        - "IMPORT"
+        - "EXPORT"
+      nullable: true
+    bandwidthMBPerNode:
+      type: "integer"
+      format: "int64"
+      description: Number of MB to send from one node to each other in case of LINK_BANDWIDTH check.
+      nullable: true
+      
+diagnostic-check-response:
+  type: object
+  properties:
+    id:
+      type: string
+      description: A UUID representing the diagnostic operation.
+    status:
+      type: string
+      description: The overall status of the diagnostic check.
+      enum:
+        - IN_PROGRESS
+        - SUCCESS
+        - FAILURE
+    startTime:
+      type: string
+      format: date-time
+      description: The time the operation started.
+    endTime:
+      type: string
+      format: date-time
+      description: The time the operation completed.
+    lastModified:
+      type: string
+      format: date-time
+      description: The time the status was last modified.
+    totalCount:
+      type: integer
+      format: int64
+      description: The total number of nodes to check.
+    successCount:
+      type: integer
+      format: int32
+      description: The number of nodes that succeeded.
+    errorCount:
+      type: integer
+      format: int32
+      description: The number of nodes that failed.
+    inProgressCount:
+      type: integer
+      format: int32
+      description: The number of nodes that are in progress.
+    nodes:
+      type: array
+      items:
+        $ref: "#diagnostic-check-node-response"
+      description: The status of each of the individual nodes.
+    totalBytesSent:
+      type: integer
+      format: int64
+      description: The total number of bytes sent in case of LINK_BANDWIDTH check.
+    totalBytesReceived:
+      type: integer
+      format: int64
+      description: The total number of bytes received in case of LINK_BANDWIDTH check.
+    bandwidth:
+      type: integer
+      format: int64
+      description: The measured bandwidth in bytes per second only in case of LINK_BANDWIDTH check.
+      
+      
+diagnostic-check-node-response:
+  type: object
+  properties:
+    nodeId:
+      description: The id of the node
+      type: string
+    status:
+      description: The status of the check
+      type: string
+      enum:
+        - IN_PROGRESS
+        - SUCCESS
+        - FAILURE
+    startTime:
+      description: The time the operation started.
+      type: string
+      format: date-time
+    endTime:
+      description: The time the operation ended.
+      type: string
+      format: date-time
+    bytesSent:
+      description: The number of bytes sent. Only applicable to LINK_BANDWIDTH check.
+      type: integer
+      format: int64
+    bytesReceived:
+      description: The number of bytes received. Only applicable to LINK_BANDWIDTH check.
+      type: integer
+      format: int64
+    error:
+      description: The error associated with the failure if not successful.
+      type: string
+    hostname:
+      description: The hostname or IP of the node.
+      type: string  
+    systemId:
+      description: The UUID of the system.
+      type: string
+    systemName:
+      description: The name of the system.
+      type: string

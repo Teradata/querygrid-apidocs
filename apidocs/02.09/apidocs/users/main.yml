@@ -1,0 +1,56 @@
+get:
+  tags:
+    - Users
+  summary: Get all Users
+  produces:
+      - "application/json"
+  responses:
+    200:
+      description: Successful operation
+      schema:
+        type: array
+        items: 
+          $ref: '#user'
+          
+post:
+  tags:
+    - Users
+  summary: Create a new User
+  consumes:
+    - "application/json"
+  produces:
+    - "application/json"
+  parameters:
+  - in: body
+    name: user
+    schema:
+      $ref: '#user'
+  responses:
+    201:
+      description: User created
+      schema:
+        $ref: '#user'
+    400:
+      description: Bad Request
+      schema:
+        $ref: '../error.yml#bad-request'
+          
+user:
+  type: object
+  properties:
+    username:
+      description: The account name.
+      type: string
+      example: user1
+    password: 
+      description: The account password (not returned on get).
+      type: string
+    defaultUser:
+      description: Flags if user is a default account.
+      type: boolean
+      example: false
+    description:
+      description: A description of the account.
+      type: string
+      
+       

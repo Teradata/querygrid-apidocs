@@ -1,0 +1,25 @@
+get:
+  tags:
+    - Queries
+  summary: Find query details by Id
+  description: Get the query using the Id
+  produces:
+    - application/json
+  parameters:
+    - name: id
+      in: path
+      description: Id of query to get details on
+      required: true
+      type: string
+  responses:
+    200:
+      description: Successful Operation
+      schema:
+        type: array
+        items:
+          $ref: '#query-details'
+    404:
+      description: No query found with the specified Id
+
+query-details:
+  type: object

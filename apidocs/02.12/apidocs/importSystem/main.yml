@@ -1,0 +1,74 @@
+post:
+  tags:
+    - Operations - Import System
+  summary: Issue a request to import a system from a remote QGM cluster.
+  description: Request to import a system.
+  operationId: postImportSystem
+  consumes:
+      - "application/json"
+  produces:
+      - "application/json"
+  parameters:
+    - name: dryRun
+      in: query
+      description: Only validate the import system request. Do not run the actual import operation.
+      type: boolean
+      example: true
+    - in: body
+      name: Import System Request
+      description: Request body for importing a system.
+      schema:
+        $ref: '#import-system-request'
+  responses:
+    200:
+      description: Successfully able to register the ADD_CLUSTER diagnostic check operation.
+      schema:
+        $ref: '#import-system-response'
+    400:
+      description: Bad Request
+
+      
+import-system-request:
+  type: object
+  properties:
+    managerHost: 
+      description: Hostname/IP of the remote QGM cluster
+      type: string
+    managerUser:
+      description: Username to access remote QGM cluster's REST API
+      type: string
+    managerPass:
+      description: managerPass to access remote QGM cluster's REST API
+      type: string
+    systemName:
+      description: Name of the system in case user wants to rename
+      type: string
+      nullable: true
+    systemId:
+      description: Id of the system to import
+      type: string
+      nullable: false
+    dataCenterId:
+      description: Id of the data center into which to import the system
+      type: string
+    clusterOption:
+      description: Cluster option for the host QGM cluster. Applicable for QueryGrid version 02.11+. The primary QGM cluster determines 
+        the version of the tdqg-node software to run on the data nodes and can run pre-02.09 versions of the QueryGrid fabric. It is always 
+        the first QGM cluster the tdqg-node service is configured to serve. The Secondary QGM clusters are always added after 
+        the tdqg-node service has been configured with a Primary QGM cluster. The tdqg-node software version selected by the secondary 
+        QueryGrid Manager cluster has no effect. The secondary QGM cluster cannot run pre-02.09 versions of the QueryGrid fabric.
+      type: string
+      enum:
+        - "PRIMARY"
+        - "SECONDARY"
+        - "EXCLUSIVE_PRIMARY"
+
+import-system-response:
+  type: object
+  properties:
+    diagnosticCheckId:
+      type: string
+      description: The id of the ADD_CLUSTER diagnostic check operation.
+    logs:
+      type: string
+      description: The logs for the import system operation.

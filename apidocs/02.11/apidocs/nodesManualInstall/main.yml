@@ -1,0 +1,67 @@
+post:
+  tags:
+    - Operations - Nodes Manual Install
+  summary: Manual node installation
+  description: Install the node package manually.
+  operationId: postNodeManualInstall
+  consumes:
+    - "application/json"
+  produces:
+    - "application/json"
+  parameters:
+  - in: body
+    name: manual-install-request
+    schema:
+      $ref: '#manual-install-request'
+  responses:
+    200:
+      description: successful operation
+      schema:
+        $ref: '#install-config-file'
+            
+            
+manual-install-request:
+  type: object
+  properties:
+    systemId:
+      description: Id of the system participating in the install
+      type: string
+    expirationDays:
+      description: The number of days before the access token expires
+      type: integer
+      format: int32
+    clusterOption:
+      description: Cluster option for the host QGM cluster. Applicable for QueryGrid version 02.11+. The primary QGM cluster determines 
+        the version of the tdqg-node software to run on the data nodes and can run pre-02.09 versions of the QueryGrid fabric. It is always 
+        the first QGM cluster the tdqg-node service is configured to serve. The Secondary QGM clusters are always added after 
+        the tdqg-node service has been configured with a Primary QGM cluster. The tdqg-node software version selected by the secondary 
+        QueryGrid Manager cluster has no effect. The secondary QGM cluster cannot run pre-02.09 versions of the QueryGrid fabric.
+      type: string
+      nullable: true
+      enum:
+        - PRIMARY
+        - SECONDARY
+        - EXCLUSIVE_PRIMARY
+      
+install-config-file:
+  type: object
+  properties:
+    systemId:
+      type: string
+    clusterId:
+      type: string
+    configId:
+      type: string
+    systemAccessToken:
+      type: string
+    managers:
+      type: array
+      items:
+        type: string
+    ports:
+      type: array
+      items:
+        type: integer
+        format: int32
+    certFile:
+      type: string

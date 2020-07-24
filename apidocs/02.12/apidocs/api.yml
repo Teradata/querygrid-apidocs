@@ -1,0 +1,52 @@
+get:
+  tags:
+    - API Info
+  summary: Get information about the version and features exposed by the API.
+  operationId: getApiInfo
+  responses:
+    200:
+      description: Successful operation
+      schema:
+        $ref: '#api-info'
+        
+api-info:
+  type: object
+  properties:
+    instanceId:
+      description: The unique identifer assigned to this QueryGrid Manager instance
+      type: string
+      example: "cfd5724f-31bf-4296-98b4-2a1fc8ab9a6f"
+    appVersion:
+      description: The QueryGrid Manager software version
+      type: string
+      example: "02.04.00.01"
+    apiVersion: 
+      description: The latest API version supported by this QueryGrid Manager instance
+      type: string
+      example: "1"
+    timestamp:
+      description: The current timestamp of the QueryGrid Manager at the time of the response in ISO-8601 format.
+      type: string
+      example: "2018-01-12T00:09:53.635+0000"
+    features:
+      type: object
+      descripton: The features supported by this version of QueryGrid Manager.
+      properties:
+        bridge: 
+          type: boolean
+          example: true
+          description: "Flags if bridge support is available."
+        roleMapping:  
+          type: boolean
+          example: true
+          description: "Flags if role mapping support is available."
+        bulkNodeDelete:
+          type: boolean
+          example: true
+          description: "Flags if bulk delete of nodes is available."
+        bulkDelete:
+          type: boolean
+          example: true
+          description: "Flags if bulk delete feature is available."
+      
+      

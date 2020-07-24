@@ -1,0 +1,36 @@
+get:
+  tags:
+    - Operations - Diagnostic Checks / Connector Install
+  summary: Get the status of a diagnostic check or connector install.
+  description: Get the diagostic check status using the Id.
+  operationId: getDiagnosticCheckById
+  produces:
+    - "application/json"
+  parameters:
+    - name: diagnosticCheckId
+      in: path
+      description: Id of diagnostic check operation.
+      required: true
+      type: string
+  responses:
+    200:
+      description: successful operation
+      schema:
+        $ref: 'main.yml#diagnostic-check-response' 
+    404:
+      description: Diagnostic Check operation status not found
+delete:
+  tags:
+    - Operations - Diagnostic Checks / Connector Install
+  summary: Abort a diagnostic check or connector install
+  description: Abort a diagnostic check based on the Id supplied
+  operationId: deleteDiagnosticCheckById
+  parameters:
+    - name: diagnosticCheckId
+      in: path
+      description: Id of diagnostic check that needs to be aborted. Applicable only for LINK_BANDWIDTH check.
+      required: true
+      type: string
+  responses:
+    200:
+      description: Abort requested for the specified diagnostic check operation

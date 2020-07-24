@@ -1,0 +1,42 @@
+get:
+  tags:
+    - Config - Fabrics
+  summary: Get the previous version for a Fabric 
+  produces:
+    - application/json
+  parameters:
+    - name: id
+      in: path
+      description: ID of the Fabric
+      required: true
+      type: string
+  responses:
+    200:
+      description: Successful Operation
+      schema:
+        $ref: 'main.yml#fabric'
+    404:
+      description: Not Found
+      schema:
+        $ref: '../error.yml#not-found'
+        
+delete:
+  tags:
+    - Config - Fabrics
+  summary: Delete the previous Fabric version
+  produces:
+    - application/json
+  parameters:
+    - name: id
+      in: path
+      description: ID of the Fabric
+      required: true
+      type: string
+  responses:
+    200:
+      description: Successful Operation
+    404:
+      description: Not Found
+      schema:
+        $ref: '../error.yml#not-found'
+        

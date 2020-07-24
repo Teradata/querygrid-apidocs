@@ -1,0 +1,186 @@
+get:
+  tags:
+    - Metrics
+  summary: Get historical metrics about QueryGrid over time.
+  description: >
+     Get historical metrics about QueryGrid over time.  The available metrics include:
+     
+     <ul>
+       <li><strong>concurrent-operations</strong> - The number of concurrent QueryGrid operations running at any given time (default)</li>
+       <li><strong>submitted-operations</strong> - The number of QueryGrid operations submitted within a period of time</li>
+       <li><strong>bytes-transferred</strong> - The total number of bytes transferred within a period of time</li>
+       <li><strong>bytes-sent</strong> - The total number of bytes sent within a period of time</li>
+       <li><strong>bytes-received</strong> - The total number of bytes received within a period of time</li>
+       <li><strong>rows-transferred</strong> - The total number of rows transferred within a period of time</li>
+       <li><strong>rows-sent</strong> - The total number of rows sent within a period of time</li>
+       <li><strong>rows-received</strong> - The total number of rows received within a period of time</li>
+     </ul>
+     
+     This endpoint accepts query parameters to determine the type of metrics to return, the time range to return, the period and 
+     groups over which to aggregate metrics, and filters to apply to get metrics specific to a QueryGrid component or user.
+ 
+  operationId: getMetrics
+  produces:
+      - "application/json"
+  parameters:
+  - name: metrics
+    in: query
+    description: One or more types of metrics to return, separated by a comma. 
+    type: array
+    items: 
+       type: string
+       enum: [concurrent-operations,submitted-operations,bytes-transferred,bytes-sent,bytes-received,rows-transferred,rows-sent,rows-received]
+  - name: startTime
+    description: The time to start returning metrics (ISO-8601 format). Defaults to current time - 24 hours.
+    in: query
+    type: string
+  - name: endTime
+    description: The time to stop returning metrics (ISO-8601 format). Defaults to current time.
+    in: query
+    type: string
+  - name: period
+    description: The period over which to aggegrate metrics.  Defaults to 1 minute if required by metric type, else null.
+    in: query
+    type: string
+    enum: [1m,2m,5m,10m,20m,30m,1h,2h,4h,8h,12h,1d,1w,all]
+  - name: timeZone
+    description: The Time Zone to use for aggregations and string based data formats.   Either an abbreviation such as "PST", a full name such as "America/Los_Angeles", or a custom ID such as "GMT-8:00"
+    in: query
+    type: string
+    example: PST
+  - name: groupBy
+    description: > 
+      Aggregate metrics over the specified group (e.g. system, initiating-system, target-system, 
+      fabric, connector, initiating-connector, target-connector, link, initiating-user). Specify one 
+      or more groups separated by a comma. E.g. groupBy=initiating-connector,target-connector. When 
+      multiple groups are specified, it is the equivalent of performing two separate SQL group by 
+      statements (though not as inefficient as that); a nested group by aggregation is not performed.
+    in: query
+    type: array
+    items: 
+      type: string
+      enum: [system, initiating-system, target-system, fabric, connector, initiating-connector, target-connector, link, initiating-user]
+  - name: filterBy
+    description: >
+      Limit results to only metrics associated with the specified items. filterBy uses the same type names as the groupBy parameter. 
+      The value should be <type1>=<id1>,...,<id2N>;...;<typeN>=<id1>,...,<idN> 
+      E.g. filterBy=initiating-system=<system_id1>,<system_id2>;initiating-user=bob,sally
+    in: query
+    type: string 
+  - name: timeout
+    description: >
+      The number of milliseconds the requestor is willing to wait for a result.  Some metric requests may take a while to 
+      return depending on the how wide the time range and the volume of query grid queries.  Requestors may choose
+      to break up large time ranges in batches so as to appear to end users that something is happening by partial loading
+      graph contents.
+    in: query
+    type: integer
+  - name: datesAsString
+    description: True if dates are returned as ISO8601 strings, else false if milliseconds since epoch.
+    in: query
+    type: boolean
+  responses:
+    200:
+      description: Successful operation
+      schema:
+        $ref: '#metrics-response'
+        
+metrics-response:
+  type: object
+  properties:
+    request:
+      description: The metrics request received.
+      type: object
+      properties:
+        metrics:
+          descripton: The metrics requested
+          type: array
+          example: [ "bytes-sent", "bytes-received" ]
+        startTime: 
+          description: The start time of the data in ISO-8601 format.
+          type: string
+          format: date-time
+          example: "2018-01-01T00:00:00.000+0000"
+        endTime:
+          description: The end time of the data in ISO-8601 format.
+          type: string
+          format: date-time
+          example: "2018-01-01T01:00:00.000+0000"
+        period: 
+          description: "The aggregation period supplied in the request."
+          type: string
+          example: "1h" 
+        timeZone:
+          description: The Time Zone to use for aggregations and string based data formats.   Either an abbreviation such as "PST", a full name such as "America/Los_Angeles", or a custom ID such as "GMT-8:00"
+          type: string
+          example: PST
+        groupBy:
+          description: "The groups that metrics were aggregregated over"
+          type: array
+          example: [ "initiating-system" ]
+        filterBy:
+          description: "The filters applied to the returned metrics"
+          type: array
+          example: [{ "type": "initiating-system", values: ["<system_id1>","<system_id2>"]},{type: "initiating-user",values: ["bob","sally"]}]
+        timeout:
+          description: >
+            The number of milliseconds the requestor is willing to wait for a result.  Some metric requests may take a while to 
+            return depending on the how wide the time range and the volume of query grid queries.  Requestors may choose
+            to break up large time ranges in batches so as to appear to end users that something is happening by partial loading
+            graph contents.
+          type: integer
+          example: 30000
+        datesAsString:
+           description: True if dates are returned as ISO8601 strings, else false if milliseconds since epoch.
+           type: boolean
+    result:
+      description: The requested metrics.
+      type: array
+      items:
+        $ref: "#metrics-result"
+   
+metrics-result:
+  type: object
+  properties:
+    metric:
+      description: The metric retured in the data payload.
+      type: string
+      example: concurrent-operations
+    group: 
+      description: The type of group
+      type: string
+      example: initiating-system      
+    componentId:
+      description: The id of item
+      type: string
+      example: "<system1_id>"
+    componentName:
+       description: The name of the item
+       type: string
+       example: "<system1_name>"
+    cancelled: 
+       description: Flags if the timeout was reached and if only partial results are being returned.
+       type: boolean
+       example: false
+    delay:
+       description:  The number of milliseconds the metrics request spent in the queue.
+       type: number
+       example: 23
+    duration:
+       description:  The total number of milliseconds it took to produce the result (including delay time).
+       type: number
+       example: 1256
+    totalRecords:
+        description: The total number of records involved in the metrics request.
+        type: number
+        example: 324235
+    processedRecords:
+        description: The total number of records processed.  Equals totalRecordSize unless the timeout is reached.
+        type: number
+        example: 324235
+    data:
+      description: "An array of arrays containing the data associated with the metric.  Nested arrays contain timestamp (milliseconds since epoch or ISO-8601) and value or timestamp, min, avg, max, depending on the metric."
+      type: string
+      example: [["2017-01-01T00:00:00.000+0000", 1, 2.5, 4], ["2017-01-01T01:00:00.000+0000", 3, 4.5, 6]]
+        
+      

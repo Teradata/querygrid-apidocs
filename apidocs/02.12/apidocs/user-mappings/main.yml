@@ -1,0 +1,90 @@
+get:
+  tags:
+    - Config - User/Role Mappings
+  summary: Get all User Mappings
+  produces:
+      - "application/json"
+  parameters:
+  - name: filterByName
+    in: query
+    description: Get user mapping associated with the specified name.
+    required: false
+    type: string
+  responses:
+    200:
+      description: Successful operation
+      schema:
+        type: array
+        items: 
+          $ref: '#user-mapping'
+          
+post:
+  tags:
+    - Config - User/Role Mappings
+  summary: Create a new User Mapping
+  consumes:
+    - "application/json"
+  produces:
+    - "application/json"
+  parameters:
+  - in: body
+    name: mapping
+    schema:
+      $ref: '#post-user-mapping'
+  responses:
+    201:
+      description: User Mapping created
+      schema:
+        $ref: '#user-mapping'
+    400:
+      description: Bad Request
+      schema:
+        $ref: '../error.yml#bad-request'
+          
+user-mapping:
+  type: object
+  properties:
+    id: 
+      description: The auto-generated ID of the user mapping.
+      type: string
+      example: "f5d72daf-aa8f-486c-8058-4fc587c0b471"
+    lastModified: 
+      description: The last time this user mapping was modified.
+      type: string
+      example: "2018-01-31T17:59:22.055+0000"
+    name:
+      description: The name of the user mapping.
+      type: string
+      example: San Diego
+    description:
+      description: A description of the user mapping.
+      type: string
+      example: Data center located in San Diego, CA.
+    userMapping:
+      description: A map of local users to remote users.
+      type: object
+      example: { "localUser1":"remoteUser1", "localUser2":"remoteUser2" } 
+    roleMapping:
+      description: A map of local roles to remote roles.
+      type: object
+      example: { "localRole1":"remoteRole1", "localRole2":"remoteRole2" } 
+       
+post-user-mapping:
+  type: object
+  properties:
+    name:
+      description: The name of the user mapping.
+      type: string
+      example: San Diego
+    description:
+      description: A description of the user mapping.
+      type: string
+      example: Data center located in San Diego, CA.
+    userMapping:
+      description: A map of local users to remote users.
+      type: object
+      example: { "localUser1":"remoteUser1", "localUser2":"remoteUser2" } 
+    roleMapping:
+      description: A map of local roles to remote roles.
+      type: object
+      example: { "localRole1":"remoteRole1", "localRole2":"remoteRole2" } 

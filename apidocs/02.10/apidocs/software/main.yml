@@ -1,0 +1,180 @@
+get:
+  tags:
+    - Software
+  summary: Find all software
+  description: Get all the software packages uploaded to QueryGrid Manager
+  operationId: getSoftware
+  produces:
+      - "application/json"
+  responses:
+    200:
+      description: Successful Operation
+      schema:
+        type: array
+        items:
+          $ref: '#software'
+          
+post:
+  tags:
+    - Software
+  summary: Upload software
+  produces:
+    - "application/json"
+  consumes:
+    - multipart/form-data
+  parameters:
+    - in: formData
+      name: file
+      type: file
+      description: The package to upload.
+  responses:
+    200:
+      description: Successful Operation
+      schema:
+        type: array
+        items:
+          $ref: '#software'
+                      
+software:
+  type: object
+  properties:
+    id:
+      description: Id of the software
+      type: string
+      example: "15fd2337-980b-4d0f-951e-e6c848a81b5d"
+    lastModified:
+      description: The last time this object was modified
+      type: string
+      format: date-time
+    name:
+      description: The name of the software package.
+      type: string
+      example: tdqg-node
+    fileName:
+      description: The file name of the uploaded software package.
+      type: string
+      example: tdqg-hive-connector__linux_x8664.02.04.00.01-56.tar.gz
+    type:
+      description: The type of the software package
+      type: enum
+      enum: [ NODE, FABRIC, CONNECTOR ]
+      example: CONNECTOR
+    version:
+      description: The version of the software pacakge
+      type: string
+      example: "02.04.00.01-56"
+    qgmVersion:
+      description: The minimum supported version of the QGM the pacakge requires.
+      type: string
+      example: "02.04.00.00"
+    platform:
+      description: The platform for the package.
+      type: string
+      example: noarch
+    buildDate:
+      description: The time the package was built.
+      type: string
+      format: date-time
+    packageSize:
+      description: The size of the package in bytes
+      type: number
+      example: 234301
+    queryPointSupport:
+      description: Flags if a connnector supports initiating queries (true), or just being the target of queries (false).
+      type: boolean
+    driverName:
+      description: The name of the driver required by the connector.
+      type: string
+      example: java
+    loaderConnectorName:
+      description: The name of the connector loader
+      type: string
+    remoteConnectorName:
+      description: The name of the remote connector.
+      type: string
+    remoteConnectorClassName:
+      description: The class name of the remote connector
+      type: string
+      example: com.teradata.querygrid.qgc.hive.remote.HiveConnectorFactory
+    connectorProperties:
+      description: Meta data about the properties that can be supplied to a connector.
+      type: array
+      items: 
+        $ref: '#connector-properties'
+    managerId:
+      description: The ID of the manager the software was uploaded to.
+      type: string
+      example: 0bfe8c3c-2d52-4818-872b-babafbd252cc
+    installMethod: 
+      description: The type of install method the connector supports.
+      type: enum
+      enum: [ NONE, ONE_DRIVER, ALL_DRIVERS ]
+      example: ONE_DRIVER
+      
+connector-properties:
+  type: object
+  properties:
+    name:
+     description: The name of the property
+     type: string
+     example: port
+    i18nKey:
+     description: The key to use to lookup the i18n version of the property in the resouce bundle.
+     example: port
+    i18nDescriptionKey:
+     description: The key to use to lookup the i18n version of the property description in the resouce bundle.
+     example: portDescription
+    description: The key to use to lookup the i18n version of the property in the resouce bundle.
+    dataType:
+     description: The data type of the property value
+     type: enum
+     enum:
+      - STRING
+      - PASSWORD
+      - INTEGER
+      - LONG
+      - FLOAT
+      - DOUBLE
+      - BOOLEAN
+      - ENUM
+     example: INTEGER
+    required:
+     descripton: Flags if the property value is required
+     type: boolean
+    requiredForConnectorCheck:
+     description: Flags if the property is required for the Connector diagnostic check.
+     type: boolean
+    connectorCheckOnly:
+     description: Flags if the property is only associated with a Connector diagnostic check
+     type: boolean
+    defaultValue:
+     description: The default value for the property
+     example: 10000
+    appliesTo:
+     decription: Flags if the property applies to the initiator, target, or both
+     type: enum
+     enum: [ INITIATOR, TARGET, BOTH ]
+     example: TARGET
+    enumValues:
+     description: The possible values if the data type is enum
+     type: array
+     example: [ OPTION1, OPTION2, OPTION3 ]
+    enumi18nKeyPrefix:
+     description: The prefix to apply to enum values when looking up i18n strings in resource bundle
+     type: string
+    unitsi18nKey:
+     description: The label used to lookup the language specific units in the resource bundle
+     type: string
+    confidental:
+     description: Flags if the property value should be kept confidential and encrypted on disk
+     type: boolean
+    overridable:
+     description: Flags if the property has the ability to be overridden by end users.
+     type: boolean
+    requiredForInstall:
+     description: Flags if the property is required for connector install
+     type: boolean
+    installOnly:
+     description: Flags if the property is only required for Connector install
+     type: boolean
+    

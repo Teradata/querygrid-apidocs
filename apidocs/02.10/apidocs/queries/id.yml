@@ -1,0 +1,20 @@
+get:
+  tags:
+    - Queries
+  summary: Find query summary by Id
+  description: Get the query summary using the query Id
+  produces:
+    - application/json
+  parameters:
+    - name: id
+      in: path
+      description: Id of query to get
+      required: true
+      type: string
+  responses:
+    200:
+      description: Successful Operation
+      schema:
+        $ref: 'main.yml#query-summary'
+    404:
+      description: No query found with the specified Id

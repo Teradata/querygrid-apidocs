@@ -1,0 +1,239 @@
+get:
+  tags:
+    - Config - Communication Policies
+  summary: Get all Communication Policies 
+  produces:
+      - "application/json"
+  parameters:
+  - in: query
+    name: flatten
+    description: Flatten out the active, pending, and previous versions into array elements instead of nesting them.
+  - in: query
+    name: extraInfo
+    type: boolean
+    description: Provide extra details (in _extraInfo section) about the communication policy.
+  responses:
+    200:
+      description: Successful operation
+      schema:
+        type: array
+        items: 
+          $ref: '#comm-policy'
+          
+post:
+  tags:
+    - Config - Communication Policies 
+  summary: Create a new Communication Policy 
+  consumes:
+    - "application/json"
+  produces:
+    - "application/json"
+  parameters:
+  - in: body
+    name: communication policy
+    schema:
+      $ref: '#post-comm-policy'
+  responses:
+    201:
+      description: Communication Policy created
+      schema:
+        $ref: '#comm-policy'
+    400:
+      description: Bad Request
+      schema:
+        $ref: '../error.yml#bad-request'
+          
+comm-policy-metadata:
+  type: object
+  properties:
+    id: 
+      description: The auto-generated ID of the communication policy.
+      type: string
+      example: "f5d72daf-aa8f-486c-8058-4fc587c0b471"
+    lastModified: 
+      description: The last time the communication policy was modified.
+      type: string
+      example: "2018-01-31T17:59:22.055+0000"
+    name:
+      description: The name of the communication policy.
+      type: string
+      example: WAN Policy
+    description:
+      description: A description of the communication policy.
+      type: string
+      example: Production communication policy used by production workloads.
+
+comm-policy:
+  allOf:
+  - $ref: '#comm-policy-metadata'
+  - type: object
+    properties:
+      previous:
+        $ref: '#comm-policy-version'
+      active:
+        $ref: '#comm-policy-version'
+      pending: 
+        $ref: '#comm-policy-version'
+
+active-comm-policy:
+  allOf:
+    - $ref: '#comm-policy-metadata'
+    - $ref: '#comm-policy-version'
+    - type: object
+      properties:
+        version:
+          description: The version of the comm-policy.
+          type: string
+          example: "ACTIVE"
+
+previous-comm-policy:
+  allOf:
+    - $ref: '#comm-policy-metadata'
+    - $ref: '#comm-policy-version'
+    - type: object
+      properties:
+        version:
+          description: The version of the comm-policy.
+          type: string
+          example: "PREVIOUS"
+
+pending-comm-policy:
+  allOf:
+    - $ref: '#comm-policy-metadata'
+    - $ref: '#comm-policy-version'
+    - type: object
+      properties:
+        version:
+          description: The version of the comm-policy.
+          type: string
+          example: "PENDING"
+     
+post-comm-policy:
+  type: object
+  properties:
+    name:
+      description: The name of the communication policy.
+      type: string
+      example: WAN Policy
+    description:
+      description: A description of the communication policy.
+      type: string
+      example: Production communication policy used by production workloads.
+    transferConcurrency:
+      type: number
+      description: >
+        The number of streams to use for communication between node pairs for transferring data.
+      example: 1
+    securityOption:
+      description: > 
+        The type of security mechansims to enable for communication <br> 
+        * IP-based Authentication, no integrity check, no encryption (INTEGRITY_NONE_ENCRYPTION_NONE) <br>
+        * IP-based authentication, checksum integrity check, no encryption (INTEGRITY_CHECKSUM_ENCRYPTION_NONE) <br>
+        * Key-based authentication, secure Integrity checks, encrypt credentials (INTEGRITY_SECURE_ENCRYPTION_CREDENTIALS_ONLY) <br>
+        * Key-based authentication, secure Integrity checks, encrypt all data (INTEGRITY_SECURE_ENCRYPTION_ALL) <br>
+      type: enum
+      example: INTEGRITY_SECURE_ENCRYPTION_ALL
+    securityAlgorithm:
+      description: The algorithm to use for integrity checks and encryption.
+      type: enum
+      enum: [  AES_CRC32C, AES_GCM, AES_SHA256, AES_SHA512 ]
+    integrityHeadersOnly:
+      description: Only perform integrity checks on message headers.
+      type: boolean
+      default: false
+    authenticationKeySize:
+      description: The size of the authentication key.
+      example: 2048
+      type: number
+    encryptionKeySize:
+      description: The size of the encryption key.
+      example: 128
+      type: number
+    compressionAlgorithm:
+      description: The compression algorithm to use
+      type: enum
+      enum: [ NONE, ZSTD ]
+      example: NONE
+      
+comm-policy-version:
+  type: object
+  properties:
+    versionId:
+      description: The ID associated with the active communication policy version.
+      example: 22995fad-13e8-42fd-82c6-31f2390fb440
+    lastModified:
+      description: The last time this version was modified.
+      example: "2017-12-11T17:52:01.088+0000" 
+    transferConcurrency:
+      type: number
+      description: >
+        The number of streams to use for communication between node pairs for transferring data.
+      example: 1
+    securityOption:
+      description: > 
+        The type of security mechansims to enable for communication <br> 
+        * IP-based Authentication, no integrity check, no encryption (INTEGRITY_NONE_ENCRYPTION_NONE) <br>
+        * IP-based authentication, checksum integrity check, no encryption (INTEGRITY_CHECKSUM_ENCRYPTION_NONE) <br>
+        * Key-based authentication, secure Integrity checks, encrypt credentials (INTEGRITY_SECURE_ENCRYPTION_CREDENTIALS_ONLY) <br>
+        * Key-based authentication, secure Integrity checks, encrypt all data (INTEGRITY_SECURE_ENCRYPTION_ALL) <br>
+      type: enum
+      example: INTEGRITY_SECURE_ENCRYPTION_ALL
+    integrityHeadersOnly:
+      description: Only perform integrity checks on message headers.
+      type: boolean
+      default: false
+    authenticationKeySize:
+      description: The size of the authentication key.
+      example: 2048
+      type: number
+    encryptionKeySize:
+      description: The size of the encryption key.
+      example: 128
+      type: number
+    compressionAlgorithm:
+      description: The compression algorithm to use
+      type: enum
+      enum: [ NONE, ZSTD ]
+      example: NONE
+    securityAlgorithm:
+      description: The security algorithm to use
+      type: enum
+      enum: [ AES_CRC32C, AES_GCM, AES_SHA256, AES_SHA512 ]
+      example: AES_GCM
+      
+comm-policy-version-update:
+  type: object
+  properties:
+    transferConcurrency:
+      type: number
+      description: >
+        The number of streams to use for communication between node pairs for transferring data.
+      example: 1
+    securityOption:
+      description: > 
+        The type of security mechansims to enable for communication <br> 
+        * IP-based Authentication, no integrity check, no encryption (INTEGRITY_NONE_ENCRYPTION_NONE) <br>
+        * IP-based authentication, checksum integrity check, no encryption (INTEGRITY_CHECKSUM_ENCRYPTION_NONE) <br>
+        * Key-based authentication, secure Integrity checks, encrypt credentials (INTEGRITY_SECURE_ENCRYPTION_CREDENTIALS_ONLY) <br>
+        * Key-based authentication, secure Integrity checks, encrypt all data (INTEGRITY_SECURE_ENCRYPTION_ALL) <br>
+      type: enum
+      example: INTEGRITY_SECURE_ENCRYPTION_ALL
+    integrityHeadersOnly:
+      description: Only perform integrity checks on message headers.
+      type: boolean
+      default: false
+    authenticationKeySize:
+      description: The size of the authentication key.
+      example: 2048
+      type: number
+    encryptionKeySize:
+      description: The size of the encryption key.
+      example: 128
+      type: number
+    compressionAlgorithm:
+      description: The compression algorithm to use
+      type: enum
+      enum: [ NONE, ZSTD ]
+      example: NONE
+
+    

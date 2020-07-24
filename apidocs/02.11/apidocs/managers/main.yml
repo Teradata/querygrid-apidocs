@@ -1,0 +1,107 @@
+get:
+  tags:
+    - Managers
+  summary: Find all the managers
+  description: Get all the managers in the cluster
+  operationId: getManagers
+  produces:
+      - "application/json"
+  parameters:
+    - name: extraInfo
+      in: query
+      description: Include additional information with manager instances such as status, disk usage, etc.
+      required: false
+      type: boolean
+  responses:
+    200:
+      description: Successful Operation
+      schema:
+        type: array
+        items:
+          $ref: '#manager'
+                       
+manager:
+  type: object
+  properties:
+    id:
+      description: Id of the manager
+      type: string
+      example: "15fd2337-980b-4d0f-951e-e6c848a81b5d"
+    lastModified:
+      description: The last time this object was modified
+      type: string
+      format: date-time
+    hostname:
+      description: The hostname of the manager
+      type: string
+    networkInterfaces:
+      description: The network interfaces associated with the manager
+      type: array
+      items:
+        type: object
+        properties:
+          name:
+            description: The name of the network interface
+            example: "eth0"
+          address:
+            description: The address associated with the network interface
+            example: "169.254.169.254"
+          prefixLength:
+            description: The subnet prefix length
+            example: 16
+    dataCenterId:
+      description: The ID of the data center the manager is associated with
+      type: string
+      example: c73cfabf-2db9-4054-bfbe-9c823b8797e7
+    version:
+      description: The version of the tdqg-manager software.
+      example: 02.04.00.02-19
+    publicAddress: 
+      description:  The internet address or hostname used by tdqg-node, tdqg-fabric, and viewpoint to access the QGM.
+      example: "10.10.10.10"
+    clusterAddress: 
+      description: The internet address other QGMs used to access this instance.
+      example: "10.10.10.10"
+    bindAddress:
+      description: The internet address that certain QGM services are bound.
+      example: "10.10.10.10"
+    startTime:
+      description: The time the Manager was last started
+      type: string 
+      format: date-time
+    additionalPublicAddresses:
+      description: A list of additional public addresses to associate with the QueryGrid Manager instance.
+      type: array
+      items:
+        type: string
+    _extraInfo:
+      description: Information not part of the saved manager schema but information that is associated and useful to know about the manager.
+      type: object
+      properties:
+        status: 
+          description: The status of the manager (e.g. ONLINE or OFFLINE).
+          type: enum
+          values: [ ONLINE, OFFLINE ]
+          example: ONLINE
+        lastHeartbeat:
+          description: The last time this Manager sent a heartbeat
+          type: string
+          format: date-time
+        diskUsage:
+          description: The percentage of available disk space on the disk volume containing logs and query metrics.
+          type: number
+          example: 44.2
+        freeSpace:
+          description: The free disk space in bytes.
+          type: number
+          example: 149786984448
+        totalSpace: 
+          description: The total disk space in bytes.
+          example: 268435456000
+        dataCenterName:
+          description: The data center the manager is located in.
+          example: "San Diego"
+          
+        
+    
+     

@@ -1,0 +1,48 @@
+post:
+  tags:
+    - Operations - Shared Memory Estimator
+  summary: Get an estimate of how much shared memory is required
+  consumes:
+    - "application/json"
+  produces:
+    - "application/json"
+  parameters:
+  - in: body
+    name: inputs
+    schema:
+      $ref: '#shared-memory-estimator-inputs'
+  responses:
+    200:
+      description: Estimate Returned
+      schema:
+        type: number
+        description: The estimated shared memory required in bytes.
+    400:
+      description: Bad Request
+      schema:
+        $ref: '../error.yml#bad-request'
+          
+shared-memory-estimator-inputs:
+  type: object
+  properties:
+    queryConcurrency: 
+      description: >  
+       Expected maximum number of QueryGrid queries the user expects to run at the same time for all
+       connectors on that system
+      type: number
+    linkBufferSize: 
+      description: >
+        The maximum buffer size that any link or connector will be configured to use involving this
+        system. Size in bytes.
+      type: number
+    linkBufferCount:
+      description: >
+        The maximum number of buffers that any link or connector will be configured to use involving
+        this system.
+      type: number
+    workersPerNode:
+      description: >
+        Number of threads that participate in a query on a given node (e.g. the number of AMPs per
+        node in Teradata)
+      type: number
+       

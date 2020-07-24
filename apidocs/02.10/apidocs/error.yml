@@ -1,0 +1,38 @@
+bad-request:
+  type: object
+  properties:
+    timestamp: 
+      description: The time of the error
+      example: "2018-02-25T20:36:31.121+0000"
+    status:
+      description: The http status code
+      example: 400
+    error:
+      description: The error description
+      example: Bad Request
+    message:
+      description: The error message
+      example: "[name must not be blank]"
+    path:
+      description: The path of the API called
+      example: "/api/v1/config/<type>"
+      
+      
+not-found:
+  type: object
+  properties:
+    timestamp: 
+      description: The time of the error
+      example: "2018-02-25T20:36:31.121+0000"
+    status:
+      description: The http status code
+      example: 404
+    error:
+      description: The error description
+      example: Not Found
+    message:
+      description: The error message
+      example: "No entity with ID=f5d72daf-aa8f-486c-8058-4fc587c0b471 found."
+    path:
+      description: The path of the API called
+      example: "/api/v1/config/<type>/f5d72daf-aa8f-486c-8058-4fc587c0b471"

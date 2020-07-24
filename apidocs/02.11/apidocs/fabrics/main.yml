@@ -1,0 +1,173 @@
+get:
+  tags:
+    - Config - Fabrics
+  summary: Get all Fabrics 
+  produces:
+      - "application/json"
+  parameters:
+  - in: query
+    name: flatten
+    description: Flatten out the active, pending, and previous versions into array elements instead of nesting them.
+  - in: query
+    name: extraInfo
+    type: boolean
+    description: Provide extra details (in _extraInfo section) about the fabric.
+  responses:
+    200:
+      description: Successful operation
+      schema:
+        type: array
+        items: 
+          $ref: '#fabric'
+          
+post:
+  tags:
+    - Config - Fabrics 
+  summary: Create a new Fabric 
+  consumes:
+    - "application/json"
+  produces:
+    - "application/json"
+  parameters:
+  - in: body
+    name: fabric
+    schema:
+      $ref: '#post-fabric'
+  responses:
+    201:
+      description: Fabric created
+      schema:
+        $ref: '#fabric'
+    400:
+      description: Bad Request
+      schema:
+        $ref: '../error.yml#bad-request'
+          
+fabric-metadata:
+  type: object
+  properties:
+    id: 
+      description: The auto-generated ID of the fabric.
+      type: string
+      example: "f5d72daf-aa8f-486c-8058-4fc587c0b471"
+    lastModified: 
+      description: The last time the fabric was modified.
+      type: string
+      example: "2018-01-31T17:59:22.055+0000"
+    name:
+      description: The name of the fabric.
+      type: string
+      example: Fabric1
+    description:
+      description: A description of the fabric.
+      type: string
+      example: Production fabric used by production workloads.
+
+fabric:
+  allOf:
+    - $ref: '#fabric-metadata'
+    - type: object
+      properties:
+        previous:
+          $ref: '#fabric-version'
+        active:
+          $ref: '#fabric-version'
+        pending: 
+          $ref: '#fabric-version'
+
+active-fabric:
+  allOf:
+    - $ref: '#fabric-metadata'
+    - $ref: '#fabric-version'
+    - type: object
+      properties:
+        version:
+          description: The version of the fabric.
+          type: string
+          example: "ACTIVE"
+
+pending-fabric:
+  allOf:
+    - $ref: '#fabric-metadata'
+    - $ref: '#fabric-version'
+    - type: object
+      properties:
+        version:
+          description: The version of the fabric.
+          type: string
+          example: "PENDING"
+
+previous-fabric:
+  allOf:
+    - $ref: '#fabric-metadata'
+    - $ref: '#fabric-version'
+    - type: object
+      properties:
+        version:
+          description: The version of the fabric.
+          type: string
+          example: "PREVIOUS"
+     
+post-fabric:
+  type: object
+  properties:
+    name:
+      description: The name of the fabric.
+      type: string
+      example: Fabric1
+    description:
+      description: A description of the fabric.
+      type: string
+      example: Production fabric used by production workloads.
+    port:
+      type: number
+      description: The port to use for communication between systems
+      example: 5000
+    softwareVersion:
+      description: The version of the fabric software to deploy.
+      type: string
+      example: 02.04.00.01-24
+      
+fabric-version:
+  type: object
+  properties:
+    versionId:
+      description: The ID associated with the active fabric version.
+      example: 22995fad-13e8-42fd-82c6-31f2390fb440
+    lastModified:
+      description: The last time this version was modified.
+      example: "2017-12-11T17:52:01.088+0000" 
+    port:
+      description: The port to use for communication between systems
+      type: number
+      example: 5000
+    softwareVersion:
+      description: The version of the fabric software to deploy.
+      type: string
+      example: 02.04.00.01-24
+    _extraInfo:
+      $ref: '#fabric-extra-info'
+      
+fabric-version-update:
+  type: object
+  properties:
+    port: 
+      type: number
+      description: The port to use for communication between systems
+      example: 5000
+    softwareVersion:
+      description: The version of the fabric software to deploy.
+      type: string
+      example: 02.04.00.01-24
+      
+fabric-extra-info:
+  type: object
+  properties:
+    nodesOnline:
+      type: number
+      description: The number of nodes online for the fabric
+      example: 104
+    nodesOffline:
+      type: number
+      description: The number of nodes offline for the fabric
+    

@@ -1,0 +1,84 @@
+get:
+  tags:
+    - Config - Bridges
+  summary: Get all Bridges
+  produces:
+      - "application/json"
+  responses:
+    200:
+      description: Successful operation
+      schema:
+        type: array
+        items: 
+          $ref: '#bridge'
+          
+post:
+  tags:
+    - Config - Bridges
+  summary: Create a new Bridge
+  consumes:
+    - "application/json"
+  produces:
+    - "application/json"
+  parameters:
+  - in: body
+    name: bridge
+    schema:
+      $ref: '#post-bridge'
+  responses:
+    201:
+      description: Bridge created
+      schema:
+        $ref: '#bridge'
+    400:
+      description: Bad Request
+      schema:
+        $ref: '../error.yml#bad-request'
+          
+bridge:
+  type: object
+  properties:
+    id: 
+      description: The auto-generated ID of the bridge.
+      type: string
+      example: "f5d72daf-aa8f-486c-8058-4fc587c0b471"
+    lastModified: 
+      description: The last time this bridge was modified.
+      type: string
+      example: "2018-01-31T17:59:22.055+0000"
+    name:
+      description: The name of the bridge.
+      type: string
+      example: Bridge1
+    description:
+      description: A description of the bridge.
+      type: string
+      example: Bridge nodes located in San Diego.
+    systemId:
+      description: The ID of the system the bridge is associated with.
+      type: string
+      example: "a05acd24-4cfd-4f08-a1fa-86341f21c3ce"
+    nodeIds:
+      description: The subset of the system's nodes to use for bridge.  Null indicates all nodes.
+      type: array
+      example: [ "3606af65-29f7-4d36-84f5-3a97e5822be1", "997b6864-99a0-4084-b984-b739825b098a" ]
+       
+post-bridge:
+  type: object
+  properties:
+    name:
+      description: The name of the bridge.
+      type: string
+      example: Bridge1
+    description:
+      description: A description of the bridge.
+      type: string
+      example: Bridge nodes located in San Diego.
+    systemId:
+      description: The ID of the system the bridge is associated with.
+      type: string
+      example: "a05acd24-4cfd-4f08-a1fa-86341f21c3ce"
+    nodeIds:
+      description: The subset of the system's nodes to use for bridge.  Null indicates all nodes.
+      type: array
+      example: [ "3606af65-29f7-4d36-84f5-3a97e5822be1", "997b6864-99a0-4084-b984-b739825b098a" ]

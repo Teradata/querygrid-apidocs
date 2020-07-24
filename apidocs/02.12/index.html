@@ -1,0 +1,87 @@
+<!-- HTML for static distribution bundle build -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Teradata QueryGrid Manager API</title>
+  <link rel="stylesheet" href="../../resources/css/main.css" />
+  <link rel="stylesheet" type="text/css" href="../../swagger-ui/3.24.2/swagger-ui.css">
+  <style>
+     html {
+      box-sizing: border-box;
+      overflow: -moz-scrollbars-vertical;
+      overflow-y: scroll;
+    }
+
+    *,
+    *:before,
+    *:after {
+      box-sizing: inherit;
+    }
+
+    body {
+      margin: 0;
+      background: #fafafa;
+    }
+
+    .swagger-ui .info .title {
+      font-weight: 500;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    }
+
+    .swagger-ui .servers {
+      display: none;
+    }
+
+    .swagger-ui .servers-title {
+      display: none;
+    }
+
+    .swagger-ui .scheme-container {
+      display: none;
+    }
+    
+    .swagger-ui .info code {
+      color: #ffffff;
+      background: #7d8492;
+    }
+    
+  </style>
+</head>
+
+<body>
+  <div class="container" style="max-width: 1460px; margin: 0 auto;">
+    <img src="../../resources/images/teradata-logo.png" alt="logo" style="border-left: 10px solid #F37340" />
+    <div id="swagger-ui"></div>
+  </div>
+
+  <script src="../../swagger-ui/3.24.2/swagger-ui-bundle.js"> </script>
+  <script src="../../swagger-ui/3.24.2/swagger-ui-standalone-preset.js"> </script>
+  <script>
+    window.onload = function () {
+      // Begin Swagger UI call region
+      const ui = SwaggerUIBundle({
+        url: "apidocs/tdqg-manager-api.yml",
+        dom_id: '#swagger-ui',
+        deepLinking: true,
+        docExpansion: 'none',
+        validatorUrl: null,
+        defaultModelsExpandDepth: -1,
+        supportedSubmitMethods: [],
+        presets: [
+          SwaggerUIBundle.presets.apis
+        ],
+        plugins: [
+          SwaggerUIBundle.plugins.DownloadUrl
+        ],
+        layout: "BaseLayout"
+      })
+      // End Swagger UI call region
+
+      window.ui = ui
+    }
+  </script>
+</body>
+
+</html>

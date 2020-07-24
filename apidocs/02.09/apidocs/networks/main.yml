@@ -1,0 +1,126 @@
+get:
+  tags:
+    - Config - Networks
+  summary: Get all Networks 
+  produces:
+      - "application/json"
+  parameters:
+  - in: query
+    name: flatten
+    description: Flatten out the active, pending, and previous versions into array elements instead of nesting them.
+  - in: query
+    name: extraInfo
+    type: boolean
+    description: Provide extra details (in _extraInfo section) about the network.
+  responses:
+    200:
+      description: Successful operation
+      schema:
+        type: array
+        items: 
+          $ref: '#network'
+          
+post:
+  tags:
+    - Config - Networks 
+  summary: Create a new Network 
+  consumes:
+    - "application/json"
+  produces:
+    - "application/json"
+  parameters:
+  - in: body
+    name: network
+    schema:
+      $ref: '#post-network'
+  responses:
+    201:
+      description: Network created
+      schema:
+        $ref: '#network'
+    400:
+      description: Bad Request
+      schema:
+        $ref: '../error.yml#bad-request'
+          
+network:
+  type: object
+  properties:
+    id: 
+      description: The auto-generated ID of the network.
+      type: string
+      example: "f5d72daf-aa8f-486c-8058-4fc587c0b471"
+    lastModified: 
+      description: The last time the network was modified.
+      type: string
+      example: "2018-01-31T17:59:22.055+0000"
+    name:
+      description: The name of the network.
+      type: string
+      example: Bynet
+    description:
+      description: A description of the network.
+      type: string
+      example: High throughput infiniband network 
+    previous:
+      $ref: '#network-version'
+    active:
+      $ref: '#network-version'
+    pending: 
+      $ref: '#network-version'
+     
+post-network:
+  type: object
+  properties:
+    name:
+      description: The name of the network.
+      type: string
+      example: Bynet
+    description:
+      description: A description of the network.
+      type: string
+      example: High throughput infiniband network 
+    matchingRules:
+      description: The rules that define how to identity network interfaces associated with the network.
+      type: array
+      items:
+        $ref: '#matching-rule'
+        
+matching-rule:
+  type: object
+  properties:
+    type: 
+      description: The type of rule (e.g. INTERFACE_NAME or CIDR_NOTATION).
+      type: enum
+      enum: [ INTERFACE_NAME, CIDR_NOTATION ]
+      example: INTERFACE_NAME
+    value:
+      description:  The value used to perform the match  (e.g. eth0 or 169.154.0.0/16)
+      type: string
+      example: eth0
+      
+network-version:
+  type: object
+  properties:
+    versionId:
+      description: The ID associated with the active network version.
+      example: 22995fad-13e8-42fd-82c6-31f2390fb440
+    lastModified:
+      description: The last time this version was modified.
+      example: "2017-12-11T17:52:01.088+0000" 
+    matchingRules:
+      type: array
+      description: The rules that define how to identity network interfaces associated with the network.
+      item:
+        $ref: '#matching-rule'
+      
+network-version-update:
+  type: object
+  properties:
+    matchingRules:
+      type: array
+      description: The rules that define how to identity network interfaces associated with the network.
+      item:
+        $ref: '#matching-rule'
+      
+    

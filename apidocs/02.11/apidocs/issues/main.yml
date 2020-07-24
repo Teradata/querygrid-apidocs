@@ -1,0 +1,110 @@
+get:
+  tags:
+    - Issues
+  summary: Find all the issues
+  description: Get all the active issues detected by QueryGrid Manager
+  operationId: getIssues
+  produces:
+      - "application/json"
+  responses:
+    200:
+      description: Successful Operation
+      schema:
+        type: array
+        items:
+          $ref: '#issue'
+                       
+issue:
+  type: object
+  properties:
+    id:
+      description: Id of the issue
+      type: string
+      example: "15fd2337-980b-4d0f-951e-e6c848a81b5d"
+    lastModified:
+      description: The last time this object was modified
+      type: string
+      format: date-time
+    createTime:
+      description: The time the issue was created.
+      type: string
+      format: date-time
+    componentType:
+      description: The type of component the issue applies to (e.g. SYSTEM or MANAGER).
+      type: enum
+      enum: [ SYSTEM, MANAGER ]
+      example: SYSTEM
+    componentId:
+      description: Id of the component the issue is associated with
+      type: string
+      example: "15fd2337-980b-4d0f-951e-e6c848a81b5d"
+    componentName:
+      description: Id of the component the issue is associated with
+      type: string
+      example: "System1"
+    dataCenterName:
+      description: The name of the data center the component is located in.
+      type: string
+      example: "DataCenter1"
+    problemType:
+      description: The reason for the issue.
+      type: enum
+      enum:
+        - NODES_MISSING
+        - NODES_OFFLINE
+        - NODES_WRONG_TIME
+        - NODES_WRONG_VERSION
+        - FABRIC_OFFLINE
+        - DRIVERS_OFFLINE
+        - FABRIC_HEARTBEAT_MISSING
+        - CONNECTOR_MISSING
+        - MANAGER_OFFLINE
+        - MANAGER_WRONG_TIME
+        - MANAGER_BACKUP_FAILED
+        - MANAGER_DISK_SPACE_LOW
+        - MANAGER_VERSION_MISMATCH
+        - LINK_MISSING    
+        - NODES_NETWORK_MISMATCH 
+      example: "NODES_OFFLINE"
+    severity:
+      description: The severity for the issue.
+      type: enum
+      enum:
+        - WARNING
+        - CRITICAL
+      example: "CRITCAL"
+    subjectLabel:
+      description: The language independent label to use to lookup the language specific issue subject.
+      type: string
+      example: issue.system.NODES_OFFLINE.subject
+    subjectParams:
+      description: The parameters to the issue subject
+      type: array
+      example: [ "system1", "4" ]
+    messageLabel:
+      description: The language independent label to use to lookup the language specific issue message.
+      type: string
+      example: issue.system.NODES_OFFLINE.message
+    messageParams:
+      description: The parameters to the issue message
+      type: array
+      example: [ "system1", "4" ]
+    configVersion:
+      description: The logical version of the component (e.g. ACTIVE, PENDING, PREVIOUS) the issue applies to, null if not applicable.
+      type: enum
+      enum: [ ACTIVE, PENDING, PREVIOUS ]
+    reporterId:
+      description: The ID of the manager that reporte the issue.
+      type: string
+      example: ac9cb7e4-3578-4499-814b-e871f8d9c3cf
+    subcomponentId:
+      description: The ID of the subcomponent the issue applies to (e.g. Fabric, Connector, Link, etc.)
+      type: string
+      example: 4b6efbe1-b5ee-4466-bcb1-a0c5cbcbda3d
+    nodeIds:
+      description: The node IDs the issue applies to (null if not appliable)
+      type: array
+      example: [ 0bfe8c3c-2d52-4818-872b-babafbd252cc, 538f5fcd-b283-4081-a2ab-05d8a222e2b8]
+        
+    
+     

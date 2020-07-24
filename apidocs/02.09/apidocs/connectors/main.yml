@@ -1,0 +1,223 @@
+get:
+  tags:
+    - Config - Connectors
+  summary: Get all Connectors 
+  produces:
+      - "application/json"
+  parameters:
+  - in: query
+    name: flatten
+    description: Flatten out the active, pending, and previous versions into array elements instead of nesting them.
+  - in: query
+    name: extraInfo
+    type: boolean
+    description: Provide extra details (in _extraInfo section) about the connector.
+  - in: query
+    name: fabricVersion
+    type: string
+    description: The fabric versionId to use when providing _extraInfo.
+  responses:
+    200:
+      description: Successful operation
+      schema:
+        type: array
+        items: 
+          $ref: '#connector'
+          
+post:
+  tags:
+    - Config - Connectors 
+  summary: Create a new Connector 
+  consumes:
+    - "application/json"
+  produces:
+    - "application/json"
+  parameters:
+  - in: body
+    name: connector
+    schema:
+      $ref: '#post-connector'
+  responses:
+    201:
+      description: Connector created
+      schema:
+        $ref: '#connector'
+    400:
+      description: Bad Request
+      schema:
+        $ref: '../error.yml#bad-request'
+          
+connector:
+  type: object
+  properties:
+    id: 
+      description: The auto-generated ID of the connector.
+      type: string
+      example: "f5d72daf-aa8f-486c-8058-4fc587c0b471"
+    lastModified: 
+      description: The last time the connector was modified.
+      type: string
+      example: "2018-01-31T17:59:22.055+0000"
+    name:
+      description: The name of the connector.
+      type: string
+      example: Connector1
+    description:
+      description: A description of the connector.
+      type: string
+      example: Production connector used by production workloads.
+    previous:
+      $ref: '#connector-version'
+    active:
+      $ref: '#connector-version'
+    pending: 
+      $ref: '#connector-version'
+     
+post-connector:
+  type: object
+  properties:
+    name:
+      description: The name of the connector.
+      type: string
+      example: TD1
+    description:
+      description: A description of the connector.
+      type: string
+      example: Production connector for TD1.
+    softwareName:
+      type: string
+      description: The name of the connector software
+      example: tdqg-teradata-connector
+    softwareVersion:
+      description: The version of the connector software to deploy.
+      type: string
+      example: 02.04.00.01-24
+    fabricId:
+      description: The ID of fabric to connect to
+      type: string
+      example: 22995fad-13e8-42fd-82c6-31f2390fb440
+    systemId:
+      description: The ID of the system to connect to.
+      type: string
+      example: 33946bcd-355b-2ac3-2bde-91f2390fb412
+    driverNodes:
+      description: An array of node IDs on which to run the connector driver.
+      type: array
+      example: [ "75588f31-b5d0-45a5-8843-481150f0e4f8", "b2edba06-119e-4200-a482-8d7cf5392663", "e5fd8358-db3c-425f-80df-d24c41a03a3c" ]
+    properties:
+      type: object
+      description: The connector properties to set.
+      example: { "server": "TD1.teradata.com", "port": 5000 }
+    overrideableProperties:
+      descripiton: The connector properties which can be overridden by the user.
+      type: array
+      example: [ "overridableProperty1", "overridableProperty2" ]
+    allowedOSUsers:
+      description: The list of OS users that are allowed to access shared memory interfaces of the Fabric
+      type: array
+      example: [ "teradata", "hive", "presto" ]
+      
+connector-version:
+  type: object
+  properties:
+    versionId:
+      description: The ID associated with the active connector version.
+      example: 22995fad-13e8-42fd-82c6-31f2390fb440
+    lastModified:
+      description: The last time this version was modified.
+      example: "2017-12-11T17:52:01.088+0000" 
+    softwareName:
+      type: string
+      description: The name of the connector software
+      example: tdqg-teradata-connector
+    softwareVersion:
+      description: The version of the connector software to deploy.
+      type: string
+      example: 02.04.00.01-24
+    fabricId:
+      description: The ID of fabric to connect to
+      type: string
+      example: 22995fad-13e8-42fd-82c6-31f2390fb440
+    systemId:
+      description: The ID of the system to connect to.
+      type: string
+      example: 33946bcd-355b-2ac3-2bde-91f2390fb412
+    driverNodes:
+      description: An array of node IDs on which to run the connector driver.
+      type: array
+      example: [ "75588f31-b5d0-45a5-8843-481150f0e4f8", "b2edba06-119e-4200-a482-8d7cf5392663", "e5fd8358-db3c-425f-80df-d24c41a03a3c" ]
+    properties:
+      type: object
+      description: The connector properties to set.
+      example: { "server": "TD1.teradata.com", "port": 5000 }
+    overrideableProperties:
+      descripiton: The connector properties which can be overridden by the user.
+      type: array
+      example: [ "overridableProperty1", "overridableProperty2" ]
+    allowedOSUsers:
+      description: The list of OS users that are allowed to access shared memory interfaces of the Fabric
+      type: array
+      example: [ "teradata", "hive", "presto" ]
+    _extraInfo:
+      $ref: '#connector-extra-info'
+      
+connector-version-update:
+  type: object
+  properties:
+    softwareName:
+      type: string
+      description: The name of the connector software
+      example: tdqg-teradata-connector
+    softwareVersion:
+      description: The version of the connector software to deploy.
+      type: string
+      example: 02.04.00.01-24
+    fabricId:
+      description: The ID of fabric to connect to
+      type: string
+      example: 22995fad-13e8-42fd-82c6-31f2390fb440
+    systemId:
+      description: The ID of the system to connect to.
+      type: string
+      example: 33946bcd-355b-2ac3-2bde-91f2390fb412
+    driverNodes:
+      description: An array of node IDs on which to run the connector driver.
+      type: array
+      example: [ "75588f31-b5d0-45a5-8843-481150f0e4f8", "b2edba06-119e-4200-a482-8d7cf5392663", "e5fd8358-db3c-425f-80df-d24c41a03a3c" ]
+    properties:
+      type: object
+      description: The connector properties to set.
+      example: { "server": "TD1.teradata.com", "port": 5000 }
+    overrideableProperties:
+      descripiton: The connector properties which can be overridden by the user.
+      type: array
+      example: [ "overridableProperty1", "overridableProperty2" ]
+    allowedOSUsers:
+      description: The list of OS users that are allowed to access shared memory interfaces of the Fabric
+      type: array
+      example: [ "teradata", "hive", "presto" ]
+      
+connector-extra-info:
+  type: object
+  properties:
+    nodesOnline:
+      type: number
+      description: The number of nodes online for the connector
+      example: 104
+    nodesOffline:
+      type: number
+      description: The number of nodes offline for the connector
+    driversOnline: 
+      type: number
+      descrpition: The number of driver nodes online for the connector
+      example: 2
+    driversOffline:
+      type: number
+      description: The number of driver nodes offline for the connector
+    systemName:
+      type: string
+      description: The name of the system the connector is associated with
+    fabricName:
+      type: string
+      description: The name of the fabric the connector is associated with
+    

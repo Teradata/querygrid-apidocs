@@ -1,0 +1,78 @@
+get:
+  tags:
+    - Config - Networks
+  summary: Get the active version for a Network 
+  produces:
+    - application/json
+  parameters:
+    - name: id
+      in: path
+      description: ID of the Network
+      required: true
+      type: string
+  responses:
+    200:
+      description: Successful Operation
+      schema:
+        $ref: 'main.yml#network'
+    404:
+      description: Not Found
+      schema:
+        $ref: '../error.yml#not-found'
+        
+put:
+  tags:
+    - Config - Networks
+  summary: Update the active Network version
+  produces:
+    - application/json
+  parameters:
+    - name: id
+      in: path
+      description: ID of the Network
+      required: true
+      type: string
+    - name: network
+      in: body
+      schema:
+        $ref: 'main.yml#post-network'
+  responses:
+    200:
+      description: Successful Operation
+      schema:
+        $ref: 'main.yml#post-network'
+    404:
+      description: Not Found
+      schema:
+        $ref: '../error.yml#not-found'
+        
+patch:
+  tags:
+    - Config - Networks
+  summary: Activate pending or previous network version
+  produces:
+    - application/json
+  parameters:
+    - name: id
+      in: path
+      description: ID of the Network
+      required: true
+      type: string
+    - name: versionId
+      in: body
+      schema:
+         type: string
+         example: "db6f0a2e-a368-4a97-91fb-cf3f61d72704"
+      description: The version ID of the version to activate.
+  responses:
+    200:
+      description: Successful Operation
+      schema:
+        $ref: 'main.yml#post-network'
+    404:
+      description: Not Found
+      schema:
+        $ref: '../error.yml#not-found'
+        
+
+        

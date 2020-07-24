@@ -1,0 +1,54 @@
+get:
+  tags:
+    - Config - Node Virtual IPs
+  summary: Get all Node Virtual IPs objects
+  produces:
+      - "application/json"
+  responses:
+    200:
+      description: Successful operation
+      schema:
+        type: array
+        items: 
+          $ref: '#node-virtual-ips-response'
+
+
+node-virtual-ips-response:
+  type: object
+  properties:
+    id: 
+      description: The ID of the Node Virtual IPs object. It should match an existing QgNode object. It is not required when issuing a PUT request.
+      type: string
+      example: "f5d72daf-aa8f-486c-8058-4fc587c0b471"
+    lastModified: 
+      description: The last time this data center was modified.
+      type: string
+      example: "2018-01-31T17:59:22.055+0000"
+    networkInterfaces:
+      description: The virtual IPs associated with the node
+      type: array
+      items:
+        type: object
+        properties:
+          name:
+            description: The name of the network interface
+            example: "eth0"
+          address:
+            description: The address associated with the network interface
+            example: "169.254.169.254"
+
+node-virtual-ips-request:
+  type: object
+  properties:
+    networkInterfaces:
+      description: The virtual IPs associated with the node
+      type: array
+      items:
+        type: object
+        properties:
+          name:
+            description: The name of the network interface
+            example: "eth0"
+          address:
+            description: The address associated with the network interface
+            example: "169.254.169.254"

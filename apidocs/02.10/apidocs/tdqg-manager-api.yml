@@ -1,0 +1,181 @@
+# ============================================================
+# https://swagger.io/docs/specification/about/
+# ============================================================
+swagger: "2.0"
+info:
+  title: Teradata QueryGrid Manager API
+  version: "02.10"
+  description: Teradata QueryGrid Manager provides APIs for centralized administration and monitoring of Teradata QueryGrid.
+basePath: /api/v1
+schemes:
+ - "https"
+securityDefinitions:
+  password:
+    type: "basic"
+paths:
+  # api
+  /:
+    $ref: 'api.yml'
+    
+  # issues
+  /issues:
+    $ref: 'issues/main.yml'
+  /issues/{id}:
+    $ref: 'issues/id.yml'
+    
+  # managers
+  /managers:
+    $ref: 'managers/main.yml'
+  /managers/{id}:
+    $ref: 'managers/id.yml'
+  
+  # nodes
+  /nodes:
+    $ref: 'nodes/main.yml'
+  /nodes/{id}:
+    $ref: 'nodes/id.yml'
+    
+  # queries
+  /queries:
+    $ref: 'queries/main.yml'
+  /queries/{id}:
+    $ref: 'queries/id.yml'
+  /queries/{id}/details:
+    $ref: 'queries/details.yml'
+    
+  # software
+  /software:
+    $ref: 'software/main.yml'
+  /software/{id}:
+    $ref: 'software/id.yml'
+  /software/{id}/package:
+    $ref: 'software/package.yml'
+  /software/{id}/resource-bundle:
+    $ref: 'software/resource-bundle.yml'
+
+  # users
+  /users:
+    $ref: 'users/main.yml'
+  /users/{username}:
+    $ref: 'users/id.yml'
+    
+  # data centers
+  /config/datacenters:
+    $ref: 'datacenters/main.yml' 
+  /config/datacenters/{id}:
+    $ref: 'datacenters/id.yml' 
+    
+  # systems
+  /config/systems:
+    $ref: 'systems/main.yml' 
+  /config/systems/{id}:
+    $ref: 'systems/id.yml' 
+    
+  # bridges
+  /config/bridges:
+    $ref: 'bridges/main.yml' 
+  /config/bridges/{id}:
+    $ref: 'bridges/id.yml' 
+    
+  # comm-policies
+  /config/comm-policies:
+    $ref: 'comm-policies/main.yml' 
+  /config/comm-policies/{id}:
+    $ref: 'comm-policies/id.yml' 
+  /config/comm-policies/{id}/active:
+    $ref: 'comm-policies/active.yml' 
+  /config/comm-policies/{id}/pending:
+    $ref: 'comm-policies/pending.yml' 
+  /config/comm-policies/{id}/previous:
+    $ref: 'comm-policies/previous.yml'
+    
+  # networks
+  /config/networks:
+    $ref: 'networks/main.yml' 
+  /config/networks/{id}:
+    $ref: 'networks/id.yml' 
+  /config/networks/{id}/active:
+    $ref: 'networks/active.yml' 
+  /config/networks/{id}/pending:
+    $ref: 'networks/pending.yml' 
+  /config/networks/{id}/previous:
+    $ref: 'networks/previous.yml' 
+    
+  # user/role mappings 
+  /config/user-mappings:
+    $ref: 'user-mappings/main.yml' 
+  /config/user-mappings/{id}:
+    $ref: 'user-mappings/id.yml'
+    
+  # fabrics
+  /config/fabrics:
+    $ref: 'fabrics/main.yml' 
+  /config/fabrics/{id}:
+    $ref: 'fabrics/id.yml' 
+  /config/fabrics/{id}/active:
+    $ref: 'fabrics/active.yml' 
+  /config/fabrics/{id}/pending:
+    $ref: 'fabrics/pending.yml' 
+  /config/fabrics/{id}/previous:
+    $ref: 'fabrics/previous.yml' 
+    
+  # connectors
+  /config/connectors:
+    $ref: 'connectors/main.yml' 
+  /config/connectors/{id}:
+    $ref: 'connectors/id.yml' 
+  /config/connectors/{id}/active:
+    $ref: 'connectors/active.yml' 
+  /config/connectors/{id}/pending:
+    $ref: 'connectors/pending.yml' 
+  /config/connectors/{id}/previous:
+    $ref: 'connectors/previous.yml' 
+    
+  # links
+  /config/links:
+    $ref: 'links/main.yml' 
+  /config/links/{id}:
+    $ref: 'links/id.yml' 
+  /config/links/{id}/active:
+    $ref: 'links/active.yml' 
+  /config/links/{id}/pending:
+    $ref: 'links/pending.yml' 
+  /config/links/{id}/previous:
+    $ref: 'links/previous.yml' 
+    
+  # metrics - commenting out, not released with 02.05.
+  # /metrics:
+  #  $ref: 'metrics/main.yml'
+      
+  # diagnostic-check
+  /operations/diagnostic-check:
+    $ref: 'diagnosticChecks/main.yml'
+  /operations/diagnostic-check/{diagnosticCheckId}:
+    $ref: 'diagnosticChecks/id.yml'
+    
+  # nodes-manual-install
+  /operations/nodes-manual-install:
+    $ref: 'nodesManualInstall/main.yml'
+    
+  # nodes-auto-install
+  /operations/nodes-auto-install:
+    $ref: 'nodesAutoInstall/main.yml'
+  /operations/nodes-auto-install/{installationId}:
+    $ref: 'nodesAutoInstall/id.yml'
+    
+  # shared memory estimator
+  /shared-memory-estimator:
+    $ref: 'sharedMemoryEstimator/main.yml'
+    
+  # support archive
+  /support-archive/manager:
+    $ref: 'support-archive/manager.yml'
+  /support-archive/query:
+    $ref: 'support-archive/query.yml'
+  /support-archive/config:
+    $ref: 'support-archive/config.yml'
+  /support-archive/node:
+    $ref: 'support-archive/node.yml'
+security:
+  - password: []
+  

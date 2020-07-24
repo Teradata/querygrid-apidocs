@@ -1,0 +1,156 @@
+get:
+  tags:
+    - Nodes
+  summary: Find all the nodes
+  description: Get all the nodes configured in QGM
+  operationId: getNodes
+  produces:
+      - "application/json"
+  parameters:
+    - name: filterBySystemId
+      in: query
+      description: Include only items associated with the specified system.
+      required: false
+      type: string
+    - name: filterByFabricId
+      in: query
+      description: Only show nodes associated with the specified fabric.
+      required: false
+      type: string
+    - name: filterByConnectorId
+      in: query
+      description: Only show nodes associated with the specified connector.
+      required: false
+      type: string
+    - name: extraInfo
+      in: query
+      description: Include additional information with node instances such as status, system name, etc.
+      required: false
+      type: boolean
+    - name: fabricVersion
+      in: query
+      description: The version of the fabric to make the node status relative to.
+      required: false
+      type: string
+    - name: connectorVersion
+      in: query
+      description: The version of the connector make the node status relative to.
+      required: false
+      type: string
+    - name: drivers
+      in: query
+      description: Filter by and make status relative to the drivers for the specified connector
+      required: false
+      type: string
+    - name: details
+      in: query
+      description: Include details of the fabrics and connectors the node is running.  Should only be used when displaying a nodes details screen, not when displaying the data grid.
+      required: false
+      type: boolean
+    - name: filterByName
+      in: query
+      description: Get node associated with the specified hostname.
+      required: false
+      type: string
+  responses:
+    200:
+      description: Successful Operation
+      schema:
+        type: array
+        items:
+          $ref: '#node'
+          
+delete:
+  tags:
+    - Nodes
+  summary: Bulk delete nodes 
+  parameters:
+    - name: nodeIds
+      in: body
+      type: object
+      schema:
+        $ref: '#ids'
+  responses:
+    200:
+      description: node deleted
+             
+ids:
+  type: object
+  properties:
+    ids:
+      type: array
+      items:
+        type: string        
+      example: [ 23b9f4a9-223d-424d-a78b-ce378be62e24, 8e2ad797-60a3-4859-bc7c-bf8bed42e085 ]
+              
+node:
+  type: object
+  properties:
+    id:
+      description: Id of the node
+      type: string
+      example: "15fd2337-980b-4d0f-951e-e6c848a81b5d"
+    lastModified:
+      description: The last time this object was modified
+      type: string
+      format: date-time
+    hostname:
+      description: The hostname of the node
+      type: string
+    aliases:
+      description: Any aliases associated with the node
+      type: array
+      items:
+        type: string
+    platform:
+      description: The node's OS/Arch
+      type: string
+      example: linux-x64
+    attributes:
+      description: The nodes attributes as determined by the QGL
+      type: object
+    systemId:
+      description: The ID of the system the node is associated with
+      type: string
+      example: c73cfabf-2db9-4054-bfbe-9c823b8797e7
+    networkInterfaces:
+      description: The network interfaces associated with the node
+      type: array
+      items:
+        type: object
+        properties:
+          name:
+            description: The name of the network interface
+            example: "eth0"
+          address:
+            description: The address associated with the network interface
+            example: "169.254.169.254"
+          prefixLength:
+            description: The subnet prefix length
+            example: 16
+    _extraInfo:
+      description: Information not part of the saved node schema but information that is associated and useful to know about the node.
+      type: object
+      properties:
+        status: 
+          description: The status of the node (e.g. ONLINE or OFFLINE).
+          type: enum
+          values: [ ONLINE, OFFLINE ]
+          example: ONLINE
+        startTime:
+          description: The start time of the node service.
+          type: string
+          format: date-time
+        systemName:
+          description: The name of the system the node belongs to.
+          example: TD1
+        dataCenterName:
+          description: The data center the node is located in.
+          example: "San Diego"
+        softwareVersion:
+          description: The version of tdqg-node software the node is running
+          example: "02.04.00.02-11"
+          
+        
+    
+     

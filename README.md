@@ -1,2 +1,1 @@
-# querygrid-manager-apidocs
-QueryGrid Manager API documentation
+QueryGrid Manager REST API documentation hosted by github pages

@@ -1,0 +1,66 @@
+get:
+  tags:
+    - Support-Archive
+  summary: Generate node support archive
+  description: Generate and download node support archive containing node logs.
+  produces:
+    - application/octet-stream
+    - application/json
+  parameters:
+    - name: start-time
+      in: query
+      description: The start of the time range to collect logs in ISO8601 format.
+      required: false
+      type: string
+    - name: end-time
+      in: query
+      description: The end of the time range to collect logs in ISO8601 format.
+      required: false
+      type: string
+    - name: days
+      in: query
+      description: The number of days back to include log files, defaults to 7.
+      required: false
+      type: string
+    - name: hours
+      in: query
+      description: The number of hours back to include log files.
+      required: false
+      type: string
+    - name: node
+      in: query
+      description: Id or the hostname of a specific node.
+      required: false
+      type: string
+    - name: system-name
+      in: query
+      description: Generate node-logs support archive for a specific system name.
+      required: false
+      type: string
+    - name: threads
+      in: query
+      description: The number of threads to use for collecting node logs, defaults to 10.
+      required: false
+      type: integer
+    - name: sender
+      in: query
+      description: Generate node-logs support archive for a specific sender. Examples - [node, fabric, connector]
+      required: false
+      type: string
+  responses:
+    200:
+      description: Successful Operation
+      content:
+        application/octet-stream:
+          schema:
+            type: file
+            format: binary
+    404:
+      description: Unable to or skipped generation of support archive.
+      content:
+        application/json:
+          schema:
+            type: object
+    507:
+      description: QueryGrid Manager is running low on disk space.
+      

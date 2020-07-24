@@ -1,0 +1,55 @@
+post:
+  tags:
+    - Operations - Nodes Manual Install
+  summary: Manual node installation
+  description: Install the node package manually.
+  operationId: postNodeManualInstall
+  consumes:
+    - "application/json"
+  produces:
+    - "application/json"
+  parameters:
+  - in: body
+    name: manual-install-request
+    schema:
+      $ref: '#manual-install-request'
+  responses:
+    200:
+      description: successful operation
+      schema:
+        $ref: '#install-config-file'
+            
+            
+manual-install-request:
+  type: object
+  properties:
+    systemId:
+      description: Id of the system participating in the install
+      type: string
+    expirationDays:
+      description: The number of days before the access token expires
+      type: integer
+      format: int32
+      
+install-config-file:
+  type: object
+  properties:
+    systemId:
+      type: string
+    clusterId:
+      type: string
+    configId:
+      type: string
+    systemAccessToken:
+      type: string
+    managers:
+      type: array
+      items:
+        type: string
+    ports:
+      type: array
+      items:
+        type: integer
+        format: int32
+    certFile:
+      type: string
