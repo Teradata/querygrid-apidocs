@@ -10,7 +10,7 @@ info:
     \ certificate is used to secure communication.  The public certificate for the\
     \ cluster can be found \nat /etc/opt/teradata/tdqgm/certs/ca.pem on the QueryGrid\
     \ Manager server.</p>\n<p>Here is an example accessing the Issues API using curl\
-    \ (replace hostname and username with appropriate values):</p>\n<code>curl -k\
+    \ (replace hostname and username with appropriate values):</p>\n<code>curl --cacert\
     \ ca.pem -u username https://hostname:9443/api/v1/issues</code>\n<p>Click on the\
     \ resources below to expand the available APIs.</p>"
   title: Teradata QueryGrid Manager API
