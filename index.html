@@ -27,7 +27,7 @@
 		<p>API paths should be prefixed with <code>https://hostname:9443/api/v1</code>.  Replace <code>hostname</code> with the actual hostname or IP address of a QueryGrid Manager instance.</p>
 		<p>QueryGrid Manager supports HTTP basic authentication.  An API user can be created using the Service Accounts tab within the Managers view of the Teradata Viewpoint QueryGrid portlet.  Unless a custom certificate is installed, a self-signed certificate is used to secure communication.  The public certificate for the cluster can be found at /etc/opt/teradata/tdqgm/certs/ca.pem on the QueryGrid Manager server.</p>
 		<p>Here is an example accessing the Issues API using curl, replace <code>hostname</code> and <code>username</code> with appropriate values:</p>
-		<p><code>curl -k ca.pem -u username https://hostname:9443/api/v1/issues</code></p>
+		<p><code>curl --cacert ca.pem -u username https://hostname:9443/api/v1/issues</code></p>
 		<p>Click on a QueryGrid version below to see API documentation specific to that version.</p>
                 <ul>
                         <li><a href="apidocs/02.16/index.html" target="_blank">02.16</a></li>
